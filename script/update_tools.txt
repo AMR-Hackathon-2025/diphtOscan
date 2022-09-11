@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git clone https://gitlab.pasteur.fr/GIPhy/JolyTree.git
+chmod +x JolyTree/JolyTree.sh

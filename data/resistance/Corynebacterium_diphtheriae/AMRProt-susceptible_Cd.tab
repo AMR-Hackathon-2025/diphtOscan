@@ -1,0 +1,11 @@
+#taxgroup	gene_symbol	accession_version	resistance_cutoff	class	subclass	resistance_protein_name
+Corynebacterium_diphtheriae	pbp2m	WP_070604859.1	           80.000000	BETA-LACTAM	BETA-LACTAM	Corynebacterium_diphtheriae_beta-lactam_resistant_PBP2M
+Corynebacterium_diphtheriae	DIP0351	WP_010934235.1	           80.000000	SpuA-CLUSTER	SpuA-CLUSTER	Corynebacterium_diphtheriae_spuA-associated_gene_cluster_DIP0351
+Corynebacterium_diphtheriae	DIP0353	WP_010934237.1	           80.000000	SpuA-CLUSTER	SpuA-CLUSTER	Corynebacterium_diphtheriae_spuA-associated_gene_cluster_DIP0353
+Corynebacterium_diphtheriae	DIP0354	WP_014301571.1	           80.000000	SpuA-CLUSTER	SpuA-CLUSTER	Corynebacterium_diphtheriae_spuA-associated_gene_cluster_DIP0354
+Corynebacterium_diphtheriae	spuA	WP_010934239.1	           80.000000	SpuA-CLUSTER	SpuA-CLUSTER	Corynebacterium_diphtheriae_spuA-associated_gene_cluster_spuA
+Corynebacterium_diphtheriae	narI	WP_010934340.1	           80.000000	narIJHGK	narIJHGK	Corynebacterium_diphtheriae_respiratory_nitrate_reductase_subunit_gamma_narI
+Corynebacterium_diphtheriae	narJ	WP_010934341.1	           80.000000	narIJHGK	narIJHGK	Corynebacterium_diphtheriae_nitrate_reductase_molybdenum_cofactor_assembly_chaperone_narJ
+Corynebacterium_diphtheriae	narH	WP_004566788.1	           80.000000	narIJHGK	narIJHGK	Corynebacterium_diphtheriae_nitrate_reductase_subunit_beta_narH
+Corynebacterium_diphtheriae	narG	WP_010934342.1	           80.000000	narIJHGK	narIJHGK	Corynebacterium_diphtheriae_nitrate_reductase_subunit_alpha_narG
+Corynebacterium_diphtheriae	narK	WP_004566793.1	           80.000000	narIJHGK	narIJHGK	Corynebacterium_diphtheriae_MFS_transporter_narK
