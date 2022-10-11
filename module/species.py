@@ -27,14 +27,14 @@ not, see <http://www.gnu.org/licenses/>.
 import os
 
 
-def get_species_results(contigs, folder):
-    species, species_hit_strength = get_corynebacterium_species(contigs, folder)
+def get_species_results(contigs, folder, threads):
+    species, species_hit_strength = get_corynebacterium_species(contigs, folder, threads)
     return {'species': species,
             'species_match': species_hit_strength}
 
 
-def get_corynebacterium_species(contigs, folder):
-    f = os.popen('mash dist '+folder+'/species_mash_sketches.msh ' + contigs)
+def get_corynebacterium_species(contigs, folder, threads):
+    f = os.popen('mash dist '+folder+'/species_mash_sketches.msh -p '+ threads + ' ' + contigs)
 
     best_species = None
     best_distance = 1.0

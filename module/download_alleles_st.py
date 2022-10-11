@@ -92,3 +92,19 @@ def download_profiles_st (database, scheme_id, folder, loci_mlst) :
         table_profiles_st = pd.read_csv(io.StringIO(r.text), sep="\t", index_col=0, dtype=str)
         table_profiles_st[loci_mlst].to_csv(dir + '/st_profiles.txt', sep='\t')  
     return dir + '/st_profiles.txt'
+
+def download_profiles_tox (database, scheme_id, folder) :
+    if folder and not os.path.exists(folder):
+        os.makedirs(folder)
+    dir = folder or './'
+    url = BASE_URI + '/db/' + database
+    r = requests.get(url)
+    if r.status_code == 404:
+        print('Database ' + database + ' does not exist.')
+        os._exit(1)
+    if scheme_id:
+        url = BASE_URI +  '/db/' + database + '/schemes/' + str(scheme_id);
+        r = requests.get(url+"/profiles_csv");
+        table_profiles_st = pd.read_csv(io.StringIO(r.text), sep="\t", index_col=0, dtype=str)
+        table_profiles_st['tox'].to_csv(dir + '/tox_profiles.txt', sep='\t')  
+    return dir + '/tox_profiles.txt'
