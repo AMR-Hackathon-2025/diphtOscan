@@ -82,16 +82,16 @@ Help:
 
 ## Example
 
-In order to illustrate the usefulness of _JolyTree_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Klebsiella_ genomes derived from the analysis of [Rodrigues et al. (2019)](https://doi.org/10.1016/j.resmic.2019.02.003).
+In order to illustrate the usefulness of _diphtOscan_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Klebsiella_ genomes derived from the analysis of [Rodrigues et al. (2019)](https://doi.org/10.1016/j.resmic.2019.02.003).
 
-##### Running _JolyTree_
+##### Running _diphtOscan_
 
-The following command line allows the script `jolyTree.sh` to be launched with default options on 8 threads:
+The following command line allows the script `diphtOscan` to be launched with default options on 8 threads:
 ```bash
 python3 __main__.py -a $genomes --taxonomy --resistance_virulence --threads 8 -o Cdiphteriae
 ```
 
-As the basename was set to 'Cdiphteriae', _JolyTree_ writes in few minutes the four following output files:
+As the basename was set to 'Cdiphteriae', _diphtOscan_ writes in few minutes the four following output files:
 
 * `Cdiphteriae.csv`: result file 
 * `$strain.fa`: extracted sequences (for every assemblie files) 
