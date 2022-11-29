@@ -27,9 +27,7 @@ _diphtOscan_  is a tool to screen genome assemblies of _Corynebacterium diphther
 git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
 ```
 
-```
-
-**C.** Give the execute permission to the file `JolyTree.sh`:
+**C.** Give the execute permission to the file `diphtOscan/__main__.py`:
 ```bash
 chmod +x __main__.py
 ```
