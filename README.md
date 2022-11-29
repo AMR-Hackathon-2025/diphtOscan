@@ -1,92 +1,103 @@
 # diphtOscan
 
+_diphtOscan_ is a command line script written in [Python](https://www.python.org/). _DiphtOscan_ runs on UNIX, Linux and most OS X operating systems.
+For more details, see the associated publication (xxx).
+
+_diphtOscan_  is a tool to screen genome assemblies of _Corynebacterium diphtheriae_ and the _Corynebacterium diphtheriae_ species complex (Cdc) for:
+ * Species (e.g. _C. diphtheriae_, _C. belfantii_, _C. rouxii_, _C. ulcerans_, _C. silvaticum_ and _C. pseudotuberculosis_)
+ * MLST sequence type
+ * Virulence loci 
+ * Antimicrobial resistance: acquired genes, SNPs
+ * Biovar prediction
+ * Detection of tox gene (presence/absence and get _tox_ alleles)
+ * Get the genomic context of the Antimicrobial resistance genes
 
 
-## Getting started
+## Installation and execution
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+**A.** Install the following programs and tools, or verify that they are already installed with the required version:
+* [python](https://www.python.org/) version >= 3.8.3
+* [mash](http://mash.readthedocs.io/en/latest/) version >= 2.2; 
+* [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.12.0
+* [hmmer](http://hmmer.org/download.html) version >= 3.3.2
+* [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.10.40
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+**B.** Clone this repository with the following command line:
+```bash
+git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
+```
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.pasteur.fr/BEBP/diphtoscan.git
-git branch -M main
-git push -uf origin main
+
+**C.** Give the execute permission to the file `JolyTree.sh`:
+```bash
+chmod +x __main__.py
 ```
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.pasteur.fr/BEBP/diphtoscan/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+**D.** Execute _JolyTree_ with the following command line model:
+```bash
+python __main__.py [options]
+```
 
 ## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Launch _diphtOscan_ without option to read the following documentation:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+```
+usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-t] [-res_vir] [-plus] [-o OUTDIR] [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] [-h] [--version]
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+diphtOscan: a tool for characterising virulence and resistance in Corynebacterium
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Required arguments:
+  -a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]
+                        FASTA file(s) for assemblies
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Screening options:
+  -u, --update          Update database MLST et AMR (default: no)
+  -t, --taxonomy        Turn on species Corynebacterium diphtheriae species complex (CdSC) and MLST sequence type (default: no)
+  -res_vir, --resistance_virulence
+                        Turn on resistance and virulence genes screening (default: no resistance and virulence gene screening)
+  -plus, --extend_genotyping
+                        Turn on all virulence genes screening (default: no all virulence gene screening)
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Output options:
+  -o OUTDIR, --outdir OUTDIR
+                        Folder for detailed output (default: results_YYYY-MM-DD_II-MM-SS_PP)
 
-## License
-For open source projects, say how it is licensed.
+Settings:
+  --min_identity MIN_IDENTITY
+                        Minimum alignment identity for main results (default: 80)
+  --min_coverage MIN_COVERAGE
+                        Minimum alignment coverage for main results (default: 50)
+  --threads THREADS     The number of threads to use for processing. (default: 4)
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Phylogenetic tree:
+  -tree, --tree         Generates a phylogenetic tree from JolyTree
+
+Help:
+  -h, --help            Show this help message and exit
+  --version             Show program's version number and exit
+```
+
+## Notes
+
+
+## Example
+
+In order to illustrate the usefulness of _JolyTree_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Klebsiella_ genomes derived from the analysis of [Rodrigues et al. (2019)](https://doi.org/10.1016/j.resmic.2019.02.003).
+
+##### Running _JolyTree_
+
+The following command line allows the script `jolyTree.sh` to be launched with default options on 8 threads:
+```bash
+python3 __main__.py -a $genomes --taxonomy --resistance_virulence --threads 8 -o Cdiphteriae
+```
+
+As the basename was set to 'Cdiphteriae', _JolyTree_ writes in few minutes the four following output files:
+
+* `Cdiphteriae.csv`: result file 
+* `$strain.fa`: extracted sequences (for every assemblie files) 
+* `$strain.out`: BLAST output file (for every assemblie files) 
+
+
+
