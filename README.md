@@ -55,7 +55,9 @@ python __main__.py [options]
 Launch _diphtOscan_ without option to read the following documentation:
 
 ```
-usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-t] [-res_vir] [-plus] [-o OUTDIR] [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] [-h] [--version]
+usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-t] [-res_vir] [-plus] [-integron] [-o OUTDIR]
+                   [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] [-h]
+                   [--version]
 
 diphtOscan: a tool for characterising virulence and resistance in Corynebacterium
 
@@ -65,11 +67,15 @@ Required arguments:
 
 Screening options:
   -u, --update          Update database MLST et AMR (default: no)
-  -t, --taxonomy        Turn on species Corynebacterium diphtheriae species complex (CdSC) and MLST sequence type (default: no)
+  -t, --taxonomy        Turn on species Corynebacterium diphtheriae species complex (CdSC) and MLST sequence type
+                        (default: no)
   -res_vir, --resistance_virulence
-                        Turn on resistance and virulence genes screening (default: no resistance and virulence gene screening)
+                        Turn on resistance and virulence genes screening (default: no resistance and virulence gene
+                        screening)
   -plus, --extend_genotyping
                         Turn on all virulence genes screening (default: no all virulence gene screening)
+  -integron, --integron
+                        Screening the intregon(default: no)
 
 Output options:
   -o OUTDIR, --outdir OUTDIR
