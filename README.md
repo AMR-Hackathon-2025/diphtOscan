@@ -17,10 +17,23 @@ _diphtOscan_  is a tool to screen genome assemblies of _Corynebacterium diphther
 
 **A.** Install the following programs and tools, or verify that they are already installed with the required version:
 * [python](https://www.python.org/) version >= 3.8.3
-* [mash](http://mash.readthedocs.io/en/latest/) version >= 2.2; 
-* [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.12.0
+* [mash](http://mash.readthedocs.io/en/latest/) version >= 2.3; 
+* [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.13.0
 * [hmmer](http://hmmer.org/download.html) version >= 3.3.2
-* [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.10.40
+* [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.11.2
+
+Note: 
+Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GIPhy/JolyTree)
+* [fastme] version >= 2.1.6.4 
+* [REQ] version >= 1.3
+* [Jolytree] version >=
+
+Need for the `--integron` i.e. using the Integron Finder version 2 tool (https://github.com/gem-pasteur/Integron_Finder)
+
+* [infernal] version >=
+* [prodigal] version >=
+* [integron_finder] version >= 2.0.2
+
 
 **B.** Clone this repository with the following command line:
 ```bash
