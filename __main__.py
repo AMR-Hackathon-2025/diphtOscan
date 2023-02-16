@@ -100,16 +100,15 @@ import pandas as pd
 import datetime
 import glob
 import os.path
-import networkx as nwx
-import itertools
 import argparse
+import subprocess
 
 sys.path.append('/module')
 
 from module.download_alleles_st import create_db, download_profiles_st, download_profiles_tox
 from module.species import get_species_results, is_cd_complex
 from module.mlstBLAST import mlst_blast
-
+from module.template_iTOL import writeTemplateBinary, writeTemplateTOX, writeTemplateStrip
  
 
          
@@ -175,14 +174,14 @@ def get_virulence_extended():
             'VIRULENCE/ADHESIN', 
             'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
             'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
-            'ciuABCD',  'ciuEFG', 'chtAB','cdtQP-sidBA-ddpABCD']
+            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
 def delete_virulence_extended():
     return [ 'SpuA-CLUSTER','narIJHK','SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
             'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
             'VIRULENCE/ADHESIN', 
             'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
             'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
-            'ciuABCD',  'ciuEFG', 'chtAB','cdtQP-sidBA-ddpABCD']
+            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
        
        
 def is_non_zero_file(fpath):  
@@ -221,26 +220,27 @@ def armfinder_to_table(data_resistance):
         table[family][strain] += gene
     return table
 
-def get_genomic_context (data) :
+def get_genomic_context (outdir, data) :
     d = []
     data_AMR = data[~data['Class'].isin( list(set(get_virulence_extended())| set(get_virulence())))]
+    fi = open(outdir+'/distance_context.txt', 'a', encoding='utf-8')
     for contigs in data_AMR['Contig id'].value_counts().keys() :            
         table_contigs  = data_AMR[data_AMR['Contig id'] == contigs]
         
         if len(table_contigs) == 1 : 
-            d.append({table_contigs['Gene symbol'].value_counts().keys()[0]})
+            d.append(table_contigs['Gene symbol'].value_counts().keys()[0])
         else:  
-            DG = nwx.Graph()
-            for (x,y) in itertools.combinations( table_contigs.index, 2 ):         
-                a = int(table_contigs['Start'][x]) + (int(table_contigs['Stop'][x]) - int(table_contigs['Start'][x]) / 2)
-                b = int(table_contigs['Start'][y]) + (int(table_contigs['Stop'][y]) - int(table_contigs['Start'][y]) / 2)
-                DG.add_node(table_contigs['Gene symbol'][x])
-                DG.add_node(table_contigs['Gene symbol'][y])    
-                if abs(b - a) <= 8000 :      
-                    DG.add_edge(table_contigs['Gene symbol'][x], table_contigs['Gene symbol'][y], weight=abs(b - a))    
-            d.extend([set(c) for c in nwx.connected_components(DG)])
-            
-    return " $$ ".join([';'.join(x) for x in d])
+            t = table_contigs['Gene symbol'].iloc[0]
+            for i in range(0,len(table_contigs)-1):
+                dis = int(table_contigs['Start'].iloc[i+1]) - int(table_contigs['Stop'].iloc[i])
+                fi.write(table_contigs['Gene symbol'].iloc[i]+'\t'+table_contigs['Gene symbol'].iloc[i+1]+'\t'+str(abs(dis))+'\n')
+                if abs(dis) <=  8000 :  
+                    t +=  ";" + table_contigs['Gene symbol'].iloc[i+1]
+                else :
+                    t +=  " || " + table_contigs['Gene symbol'].iloc[i+1]                
+            d.append(t)
+    fi.close()        
+    return " || ".join(d)
 
 def find_resistance_db (args):
             files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]
@@ -271,7 +271,9 @@ def parse_arguments():
     screening_args.add_argument('-plus', '--extend_genotyping', action='store_true',
                                 help='Turn on all virulence genes screening (default: no all virulence '
                                      'gene screening)')
-    
+    screening_args.add_argument('-integron', '--integron', action='store_true',
+                                help='Screening the intregon(default: no)')
+                                     
     output_args = parser.add_argument_group('Output options')
     
      
@@ -292,6 +294,7 @@ def parse_arguments():
     tree_args = parser.add_argument_group('Phylogenetic tree')
     tree_args.add_argument('-tree', '--tree', action='store_true',
                            help='Generates a phylogenetic tree from JolyTree')
+    
     
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
@@ -318,6 +321,13 @@ def parse_arguments():
     return args 
 
 
+    if args.integron: 
+        rc = subprocess.call(["command", "-v", "integron_finder"])
+        if rc == 0:
+            args.integron = True
+        else:
+            print('integron_finder missing in path!')
+            args.integron = False
  
 if __name__ == "__main__":
       
@@ -385,16 +395,26 @@ if __name__ == "__main__":
             if is_non_zero_file(args.outdir +'/' +strain + ".prot.fa"):
                 data = pd.read_csv(args.outdir +'/' + strain + ".blast.out",sep="\t", dtype='str')
                 data_resistance = pd.concat([data_resistance, data], axis = 0, ignore_index=True)
-                if  args.extend_genotyping :
-                    dict_genome.update({"GENOMIC_CONTEXT" : get_genomic_context (data)})
+                dict_genome.update({"GENOMIC_CONTEXT" : get_genomic_context (args.outdir, data)})
             else :
                 os.system('rm '+ args.outdir +'/' + strain + ".prot.fa")
                 os.system('rm '+ args.outdir +'/' + strain + ".blast.out")
-            
-            
+                
+        if args.integron :
+          os.system('integron_finder --cpu ' + str(args.threads)+
+                    ' --outdir '+ args.outdir + "/" +
+                    ' --gbk --func-annot --mute '+ fasta)   
+          os.system('find '+ args.outdir + "/Results_Integron_Finder_*/ " + '-empty -type d -delete')
+          
+          files = pd.read_csv(args.outdir + "/Results_Integron_Finder_"+strain + "/" + strain+".summary",sep="\t", index_col=0, skiprows = 1)
+          dict_genome.update(files[['CALIN','complete','In0']].sum().to_dict())
+          
+          
         dict_results[strain] = dict_genome
     
+        
     
+        
     table_results = pd.DataFrame(dict_results)
     table_results = table_results.T
     
@@ -414,7 +434,48 @@ if __name__ == "__main__":
         results = table_results
         
     results = results.fillna("-")
+    
+    #=============================================================================#
+    # spuA and narG 
+    
+    if "spuA" in results.columns:
+        SpuA_CLUSTER = ["spuA"]
+        SpuA_CLUSTER_color = ['#002b00']
+        SpuA_CLUSTER_symbol = ["2"]
+        writeTemplateBinary(args.outdir , results, "spuA", SpuA_CLUSTER, SpuA_CLUSTER_color, SpuA_CLUSTER_symbol)
+        
+    if "narG" in results.columns:
+        narIJHGK = ["narG"]
+        narIJHGK_color = ['#f1c40f']
+        narIJHGK_symbol = ["2"]
+        writeTemplateBinary(args.outdir, results, "narG", narIJHGK, narIJHGK_color, narIJHGK_symbol)
+        
+    # tox
+    if "TOXIN" in results.columns:
+        writeTemplateTOX(args.outdir, results, 'TOXIN')
+    
+    # ARM
+    list_familiesRes ={'AMINOGLYCOSIDE' : ['#a6cee3', '#1f78b4'],
+                            'MACROLIDE' : ['#b2df8a', '#33a02c'],
+                             'PHENICOL' : ['#fb9a99', '#e31a1c'],
+                          'SULFONAMIDE' : ['#fdbf6f', '#ff7f00'],
+                         'TETRACYCLINE' : ['#cab2d6', "#6a3d9a"],
+                         'TRIMETHOPRIM' : ['#ffff99', '#b15928'],
+                  'QUATERNARY AMMONIUM' : ["#e0eaf4", "#3c6498"],
+                          'BETA-LACTAM' : ["#da74da", "#9e3c8b"],
+                            'QUINOLONE' : ["#b0c665", "#6c7b38"],
+                            'RIFAMYCIN' : ["#bd924f", "#926114"]}
+
+
+    for family in list_familiesRes : 
+        if family in results.columns:
+            writeTemplateStrip (args.outdir, results, family, list_familiesRes)
+    
+    
+    #=============================================================================#
+    
     results.to_csv(args.outdir+"/"+args.outdir.split("/")[-1]+".txt", sep='\t')
+    
     
     
     if args.tree and len(args.assemblies) >= 4 : 

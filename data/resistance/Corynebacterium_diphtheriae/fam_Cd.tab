@@ -124,13 +124,13 @@ ddpD	cdtQP-sidBA-ddpABCD	ddpD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	SIDERO
 Heme_binding_extraction_and_import	ALL	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT			
 Heme_binding_extraction_and_import_Corynebacterium	Heme_binding_extraction_and_import	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT			
 htaA-hmuTUV-htaBC	Heme_binding_extraction_and_import_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT			
-htaB	htaA-hmuTUV-htaBC	htaB	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Membrane protein 
-htaC	htaA-hmuTUV-htaBC	htaC	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Cell-surface hemin receptor 
-htaA	htaA-hmuTUV-htaBC	htaA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Cell-surface hemin receptor; nonfunctional due to frameshift 
-hmuT	htaA-hmuTUV-htaBC	hmuT	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Iron-related transport system receptor precursor protein 
-hmuU	htaA-hmuTUV-htaBC	hmuU	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Iron-related transport system membrane protein 
-hmuV	htaA-hmuTUV-htaBC	hmuV	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Iron-related transport system ATP-binding protein 
-hmuO	Heme_binding_extraction_and_import_Corynebacterium	hmuO	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	hmuO	hmuO	Heme oxygenase 
+htaB	htaA-hmuTUV-htaBC	htaB	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Membrane protein 
+htaC	htaA-hmuTUV-htaBC	htaC	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Cell-surface hemin receptor 
+htaA	htaA-hmuTUV-htaBC	htaA	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Cell-surface hemin receptor; nonfunctional due to frameshift 
+hmuT	htaA-hmuTUV-htaBC	hmuT	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Iron-related transport system receptor precursor protein 
+hmuU	htaA-hmuTUV-htaBC	hmuU	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Iron-related transport system membrane protein 
+hmuV	htaA-hmuTUV-htaBC	hmuV	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	htaA-hmuTUV-htaBC	htaA-hmuTUV-htaBC	Iron-related transport system ATP-binding protein 
+hmuO	Heme_binding_extraction_and_import_Corynebacterium	hmuO	-	0.00	0.00	80.00	80.00	80.00	80.00	80.00	80.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	hmuO	hmuO	Heme oxygenase 
 frgCBAD	Iron-uptake-system_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	IRON_UPTAKE_SYSTEM	IRON_UPTAKE_SYSTEM			
 frgC	frgCBAD	frgC	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	IRON_UPTAKE_SYSTEM	IRON_UPTAKE_SYSTEM	frgCBAD	frgCBAD	Putative iron-siderophore uptake system ATP-binding component 
 frgB	frgCBAD	frgB	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	IRON_UPTAKE_SYSTEM	IRON_UPTAKE_SYSTEM	frgCBAD	frgCBAD	Putative iron-siderophore uptake system transmembrane component 
@@ -139,3 +139,5 @@ frgD	frgCBAD	frgD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	IRON_UPTAKE_SYSTEM
 chtAB	Heme_binding_extraction_and_import_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT			
 chtB	chtAB	chtB	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	chtAB	chtAB	Putative membrane protein 
 chtA	chtAB	chtA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	chtAB	chtAB	Putative membrane protein 
+chtC	Heme_binding_extraction_and_import_Corynebacterium	chtC	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	chtC	chtC	Putative membrane protein 
+HbpA	Heme_binding_extraction_and_import_Corynebacterium	HbpA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	HEME_BINDING_EXTRACTION_AND_IMPORT	HEME_BINDING_EXTRACTION_AND_IMPORT	HbpA	HbpA	Putative membrane protein 
