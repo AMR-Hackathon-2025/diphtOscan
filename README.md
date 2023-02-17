@@ -101,8 +101,7 @@ Help:
 
 ## Example
 
-In order to illustrate the usefulness of _diphtOscan_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Klebsiella_ genomes derived from the analysis of [Rodrigues et al. (2019)](https://doi.org/10.1016/j.resmic.2019.02.003).
-
+In order to illustrate the usefulness of _diphtOscan_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Corynebacterium diphtheriae_ genomes derived from the analysis of xxx.
 ##### Running _diphtOscan_
 
 The following command line allows the script `diphtOscan` to be launched with default options on 8 threads:
