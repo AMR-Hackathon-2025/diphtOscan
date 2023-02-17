@@ -19,19 +19,14 @@ _diphtOscan_  is a tool to screen genome assemblies of _Corynebacterium diphther
 * [python](https://www.python.org/) version >= 3.8.3
 * [mash](http://mash.readthedocs.io/en/latest/) version >= 2.3; 
 * [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.13.0
-* [hmmer](http://hmmer.org/download.html) version >= 3.3.2
 * [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.11.2
 
 Note: 
 Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GIPhy/JolyTree)
-* [fastme] version >= 2.1.6.4 
-* [REQ] version >= 1.3
 * [Jolytree](https://gitlab.pasteur.fr/GIPhy/JolyTree) version >= 2.1
 
 Need for the `--integron` i.e. using the Integron Finder version 2 tool (https://github.com/gem-pasteur/Integron_Finder)
 
-* [infernal] version >=
-* [prodigal] version >=
 * [integron_finder](https://github.com/gem-pasteur/Integron_Finder) version >= 2.0.2
 
 
@@ -45,7 +40,7 @@ git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
 chmod +x __main__.py
 ```
 
-**D.** Execute _JolyTree_ with the following command line model:
+**D.** Execute _diphtOscan_ with the following command line model:
 ```bash
 python __main__.py [options]
 ```
@@ -96,12 +91,10 @@ Help:
   --version             Show program's version number and exit
 ```
 
-## Notes
-
-
 ## Example
 
 In order to illustrate the usefulness of _diphtOscan_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Corynebacterium diphtheriae_ genomes derived from the analysis of xxx.
+
 ##### Running _diphtOscan_
 
 The following command line allows the script `diphtOscan` to be launched with default options on 8 threads:
@@ -114,6 +107,8 @@ As the basename was set to 'Cdiphteriae', _diphtOscan_ writes in few minutes the
 * `Cdiphteriae.csv`: result file 
 * `$strain.fa`: extracted sequences (for every assemblie files) 
 * `$strain.out`: BLAST output file (for every assemblie files) 
+
+
 
 
 
