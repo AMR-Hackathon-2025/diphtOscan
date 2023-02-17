@@ -26,13 +26,13 @@ Note:
 Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GIPhy/JolyTree)
 * [fastme] version >= 2.1.6.4 
 * [REQ] version >= 1.3
-* [Jolytree] version >=
+* [Jolytree](https://gitlab.pasteur.fr/GIPhy/JolyTree) version >= 2.1
 
 Need for the `--integron` i.e. using the Integron Finder version 2 tool (https://github.com/gem-pasteur/Integron_Finder)
 
 * [infernal] version >=
 * [prodigal] version >=
-* [integron_finder] version >= 2.0.2
+* [integron_finder](https://github.com/gem-pasteur/Integron_Finder) version >= 2.0.2
 
 
 **B.** Clone this repository with the following command line:
