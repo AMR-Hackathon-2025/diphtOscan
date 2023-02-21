@@ -1,4 +1,4 @@
-<p align="center"><img src="uploads/4d75f18ef982358a4a316a6e884e0ae8/LogoDiphtOscan.png" width="500"></p>
+## _diphtOscan_
 
 _diphtOscan_ is a command line script written in [Python](https://www.python.org/). _DiphtOscan_ runs on UNIX, Linux and most OS X operating systems.
 For more details, see the associated publication (xxx).
