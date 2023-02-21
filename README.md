@@ -1,17 +1,17 @@
-# diphtOscan
+<p align="center"><img src="uploads/4d75f18ef982358a4a316a6e884e0ae8/LogoDiphtOscan.png" width="500"></p>
 
 _diphtOscan_ is a command line script written in [Python](https://www.python.org/). _DiphtOscan_ runs on UNIX, Linux and most OS X operating systems.
 For more details, see the associated publication (xxx).
 
-_diphtOscan_  is a tool to screen genome assemblies of _Corynebacterium diphtheriae_ and the _Corynebacterium diphtheriae_ species complex (Cdc) for:
- * Species (e.g. _C. diphtheriae_, _C. belfantii_, _C. rouxii_, _C. ulcerans_, _C. silvaticum_ and _C. pseudotuberculosis_)
- * MLST sequence type
- * Virulence loci 
- * Antimicrobial resistance: acquired genes, SNPs
- * Biovar prediction
- * Detection of tox gene (presence/absence and get _tox_ alleles)
- * Get the genomic context of the Antimicrobial resistance genes
-
+_diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphtheriae_ and other species of the _Corynebacterium diphtheriae_ species complex (CdSC) for:
+* Species (e.g. _C. diphtheriae_, _C. ulcerans_, _C. pseudotuberculosis_, _C. belfantii_, _C. rouxii_ and _C. silvaticum_)
+* Biovar-associated genes (_spuA_, nitrate reductase gene cluster)
+* MLST sequence type
+* Virulence factors, including _tox_ gene detection and disruption prediction
+* Antimicrobial resistance determinants: acquired genes (_ermX_, _pbp2m_, …) and SNPs (e.g., _rpoB_, _gyrA_)
+* Genomic context of genomic features associated with resistance
+* Presence of integrons (using Integron Finder: https://github.com/gem-pasteur/Integron_Finder) 
+* Tree building (using JolyTree: https://gitlab.pasteur.fr/GIPhy/JolyTree)
 
 ## Installation and execution
 
