@@ -52,9 +52,9 @@ Usage:
 
 __authors__ = ("Melanie HENNART")
 __contact__ = ("melanie.hennart@pasteur.fr")
-__version__ = "1.0.0"
+__version__ = "1.2.0"
 __copyright__ = "copyleft"
-__date__ = "2022/10/11"
+__date__ = "2023/04/12"
 
 ###############################################################################
 #                                                                             #
@@ -146,19 +146,17 @@ def get_tox_results(infoTOX, contigs, args):
     
     assert len(tox_header) == len(chr_st_detail)
     results = dict(zip(infoTOX[0], chr_st_detail))
-    #results = {'TOX': chr_st}
     
-    #results.update(dict(zip(infoTOX[0], chr_st_detail)))
     return results
 
 def get_chromosome_mlst_header():
     return ['atpA', 'dnaE', 'dnaK', 'fusA', 'leuA', 'odhA', 'rpoB']
 
 def get_tox_header():
-    return ['tox']
+    return ['tox_allele']
 
 def get_virulence():
-    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
+    return ['REPRESSOR','TOXIN','OTHER_TOXINS', 
             'spuA', 'narG',
             'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
             'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
@@ -167,7 +165,7 @@ def get_virulence():
             'chtAB','htaA-hmuTUV-htaBC', 'cdtQP-sidBA-ddpABCD']
     
 def get_virulence_extended(): 
-    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
+    return ['REPRESSOR','TOXIN','OTHER_TOXINS', 
             'SpuA-CLUSTER', 'narIJHK',
             'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
             'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
@@ -261,12 +259,14 @@ def parse_arguments():
     screening_args.add_argument('-u', '--update', action='store_true',
                                 help='Update database MLST et AMR (default: no)')
     
-    screening_args.add_argument('-t', '--taxonomy', action='store_true',
+    screening_args.add_argument('-st', '--mlst', action='store_true',
                                 help='Turn on species Corynebacterium diphtheriae species complex (CdSC)'
                                      ' and MLST sequence type (default: no)')
+    screening_args.add_argument('-t', '--tox', action='store_true',
+                                help='Turn on tox allele (default: no)')
     
     screening_args.add_argument('-res_vir', '--resistance_virulence', action='store_true',
-                                help='Turn on resistance and virulence genes screening (default: no resistance '
+                                help='Turn on resistance and main virulence genes screening (default: no resistance '
                                      'and virulence gene screening)')
     screening_args.add_argument('-plus', '--extend_genotyping', action='store_true',
                                 help='Turn on all virulence genes screening (default: no all virulence '
@@ -310,10 +310,10 @@ def parse_arguments():
 
     args = parser.parse_args()
     
-    if args.taxonomy:
-        args.mlst = True
-    else :
-        args.mlst = False
+    #if args.taxonomy:
+        #args.mlst = True
+    #else :
+        #args.mlst = False
         
     args.extract = False    
     args.path = os.path.dirname(os.path.abspath(__file__))  
@@ -346,6 +346,7 @@ if __name__ == "__main__":
         download_profiles_st ("pubmlst_diphtheria_seqdef", "3", args.path +"/data/mlst", loci_mlst)
         print("   ... done \n")
         
+        os.system("rm "+ TOX_db[1] + "* " + TOX_db[2] + "* ")
         print("Downloading tox database")
         path_tox_sequences, loci_tox = create_db("pubmlst_diphtheria_seqdef", "4", args.path +"/data/tox")
         download_profiles_tox ("pubmlst_diphtheria_seqdef", "4", args.path +"/data/tox")
@@ -367,8 +368,9 @@ if __name__ == "__main__":
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
-        strain = genome.split('/')[-1].split('.')[0]
-        print (strain)
+        basename = os.path.basename(genome)
+        strain = os.path.splitext(basename)[0]
+        
         fasta =  get_path +'/'+genome
         dict_genome =  get_species_results(fasta, args.path + '/data/species', str(args.threads))   
         
@@ -376,7 +378,8 @@ if __name__ == "__main__":
             cd_complex = is_cd_complex(dict_genome)
             dict_genome.update(get_chromosome_mlst_results(MLST_db, fasta, cd_complex, args))
         
-        dict_genome.update(get_tox_results(TOX_db, fasta, args))
+        if args.tox :
+            dict_genome.update(get_tox_results(TOX_db, fasta, args))
             
         if args.resistance_virulence :   
             min_identity = "-1" # defaut amrfinder
