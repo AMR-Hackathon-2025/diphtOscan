@@ -393,7 +393,7 @@ if __name__ == "__main__":
                       ' --organism Corynebacterium_diphtheriae' +
                       ' --database ' + resistance_db +
                       ' --threads ' + str(args.threads)+
-                      ' --blast_bin /opt/gensoft/exe/blast+/2.12.0/bin/' +
+                      #' --blast_bin /opt/gensoft/exe/blast+/2.12.0/bin/' +
                       ' --translation_table 11 --plus --quiet ')
             if is_non_zero_file(args.outdir +'/' +strain + ".prot.fa"):
                 data = pd.read_csv(args.outdir +'/' + strain + ".blast.out",sep="\t", dtype='str')
