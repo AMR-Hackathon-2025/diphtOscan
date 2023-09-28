@@ -250,27 +250,29 @@ def parse_arguments():
                                                  'virulence and resistance in Corynebacterium',
                                      add_help=False)
 
-    required_args = parser.add_argument_group('Required arguments')
-    required_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=True,
-                               help='FASTA file(s) for assemblies')
-
     screening_args = parser.add_argument_group('Screening options')
     
     screening_args.add_argument('-u', '--update', action='store_true',
                                 help='Update database MLST et AMR (default: no)')
     
+    screening_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=('-u' not in sys.argv and '--update' not in sys.argv),
+                               help='FASTA file(s) for assemblies') #-a is required only if -u is not present. It allows the user to update the database easily
+                                
     screening_args.add_argument('-st', '--mlst', action='store_true',
                                 help='Turn on species Corynebacterium diphtheriae species complex (CdSC)'
                                      ' and MLST sequence type (default: no)')
+
     screening_args.add_argument('-t', '--tox', action='store_true',
                                 help='Turn on tox allele (default: no)')
-    
+
     screening_args.add_argument('-res_vir', '--resistance_virulence', action='store_true',
                                 help='Turn on resistance and main virulence genes screening (default: no resistance '
                                      'and virulence gene screening)')
+
     screening_args.add_argument('-plus', '--extend_genotyping', action='store_true',
                                 help='Turn on all virulence genes screening (default: no all virulence '
                                      'gene screening)')
+
     screening_args.add_argument('-integron', '--integron', action='store_true',
                                 help='Screening the intregon(default: no)')
                                      
