@@ -54,7 +54,7 @@ __authors__ = ("Melanie HENNART")
 __contact__ = ("melanie.hennart@pasteur.fr")
 __version__ = "1.2.0"
 __copyright__ = "copyleft"
-__date__ = "202/04/12"
+__date__ = "2023/04/12"
 
 ###############################################################################
 #                                                                             #
@@ -100,15 +100,14 @@ import pandas as pd
 import datetime
 import glob
 import os.path
-import itertools
 import argparse
+import subprocess
 
 sys.path.append('/module')
 
-from module.download_alleles_st import create_db, download_profiles_st, download_profiles_tox
 from module.species import get_species_results, is_cd_complex
 from module.mlstBLAST import mlst_blast
-from module.template_iTOL import writeTemplateBinary, writeTemplateTOX, writeTemplateStrip
+from module.template_iTOL import writeTemplateStrip
 from module.biovar_detection import spuA, narG, toxin
 from module.updating_databse import update_database
 from module.jolytree_generation import generate_jolytree
@@ -254,47 +253,53 @@ def parse_arguments():
                                                  'virulence and resistance in Corynebacterium',
                                      add_help=False)
 
-
-
     screening_args = parser.add_argument_group('Screening options')
     
     screening_args.add_argument('-u', '--update', action='store_true',
                                 help='Update database MLST et AMR (default: no)')
     
     screening_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=('-u' not in sys.argv and '--update' not in sys.argv),
-                               help='FASTA file(s) for assemblies') #-a is required only if -u is not present. It allows the user to update the database easily 
-    
-    screening_args.add_argument('-t', '--taxonomy', action='store_true',
+                               help='FASTA file(s) for assemblies') #-a is required only if -u is not present. It allows the user to update the database easily
+                                
+    screening_args.add_argument('-st', '--mlst', action='store_true',
                                 help='Turn on species Corynebacterium diphtheriae species complex (CdSC)'
                                      ' and MLST sequence type (default: no)')
-    
+
+    screening_args.add_argument('-t', '--tox', action='store_true',
+                                help='Turn on tox allele (default: no)')
+
     screening_args.add_argument('-res_vir', '--resistance_virulence', action='store_true',
-                                help='Turn on resistance and virulence genes screening (default: no resistance '
+                                help='Turn on resistance and main virulence genes screening (default: no resistance '
                                      'and virulence gene screening)')
+
     screening_args.add_argument('-plus', '--extend_genotyping', action='store_true',
                                 help='Turn on all virulence genes screening (default: no all virulence '
                                      'gene screening)')
-    
+
+    screening_args.add_argument('-integron', '--integron', action='store_true',
+                                help='Screening the intregon(default: no)')
+                                     
     output_args = parser.add_argument_group('Output options')
-    
+
      
     output_args.add_argument('-o', '--outdir', type=str, default="results_"+ datetime.datetime.today().strftime("%Y-%m-%d_%I-%M-%S_%p"),
                              help='Folder for detailed output (default: results_YYYY-MM-DD_II-MM-SS_PP)')
-
 
     setting_args = parser.add_argument_group('Settings')
     
     setting_args.add_argument('--min_identity', type=float, default=80.0,
                               help='Minimum alignment identity for main results (default: 80)')
-
+    
     setting_args.add_argument('--min_coverage', type=float, default=50.0,
                               help='Minimum alignment coverage for main results (default: 50)')
+    
     setting_args.add_argument('--threads', type=int, default=4,
                               help='The number of threads to use for processing. (default: 4)')
     
     tree_args = parser.add_argument_group('Phylogenetic tree')
     tree_args.add_argument('-tree', '--tree', action='store_true',
                            help='Generates a phylogenetic tree from JolyTree')
+    
     
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
@@ -303,31 +308,31 @@ def parse_arguments():
                            help="Show program's version number and exit")
 
     # If no arguments were used, print the entire help (argparse default is to just give an error
+    # like '-a is required').
     if len(sys.argv) == 1:
         parser.print_help(file=sys.stderr)
         sys.exit(1)
 
     args = parser.parse_args()
-    
-    if args.taxonomy:
-        args.mlst = True
-    else :
-        args.mlst = False
-        
     args.extract = False    
     args.path = os.path.dirname(os.path.abspath(__file__))  
     
     return args 
 
 
+    if args.integron: 
+        rc = subprocess.call(["command", "-v", "integron_finder"])
+        if rc == 0:
+            args.integron = True
+        else:
+            print('integron_finder missing in path!')
+            args.integron = False
  
 if __name__ == "__main__":
       
-    #=== Parameters
     args = parse_arguments()
     get_path = os.getcwd()
-    #=== 
-      
+
     MLST_db = (get_chromosome_mlst_header(), args.path + '/data/mlst/pubmlst_diphtheria_seqdef_scheme_3.fas', args.path + '/data/mlst/st_profiles.txt') 
     TOX_db = (get_tox_header(), args.path + '/data/tox/pubmlst_diphtheria_seqdef_scheme_4.fas', args.path + '/data/tox/tox_profiles.txt') 
 
@@ -339,8 +344,9 @@ if __name__ == "__main__":
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
-        strain = genome.split('/')[-1].split('.')[0]
-        print (strain)
+        basename = os.path.basename(genome)
+        strain = os.path.splitext(basename)[0]
+        
         fasta =  get_path +'/'+genome
         dict_genome =  get_species_results(fasta, args.path + '/data/species', str(args.threads))   
         
@@ -348,7 +354,8 @@ if __name__ == "__main__":
             cd_complex = is_cd_complex(dict_genome)
             dict_genome.update(get_chromosome_mlst_results(MLST_db, fasta, cd_complex, args))
         
-        dict_genome.update(get_tox_results(TOX_db, fasta, args))
+        if args.tox :
+            dict_genome.update(get_tox_results(TOX_db, fasta, args))
             
         if args.resistance_virulence :   
             min_identity = "-1" # defaut amrfinder
@@ -362,7 +369,7 @@ if __name__ == "__main__":
                       ' --organism Corynebacterium_diphtheriae' +
                       ' --database ' + resistance_db +
                       ' --threads ' + str(args.threads)+
-                      ' --blast_bin /opt/gensoft/exe/blast+/2.12.0/bin/' +
+                      #' --blast_bin /opt/gensoft/exe/blast+/2.12.0/bin/' +
                       ' --translation_table 11 --plus --quiet ')
             if is_non_zero_file(args.outdir +'/' +strain + ".prot.fa"):
                 data = pd.read_csv(args.outdir +'/' + strain + ".blast.out",sep="\t", dtype='str')
@@ -371,11 +378,22 @@ if __name__ == "__main__":
             else :
                 os.system('rm '+ args.outdir +'/' + strain + ".prot.fa")
                 os.system('rm '+ args.outdir +'/' + strain + ".blast.out")
-            
-            
+                
+        if args.integron :
+          os.system('integron_finder --cpu ' + str(args.threads)+
+                    ' --outdir '+ args.outdir + "/" +
+                    ' --gbk --func-annot --mute '+ fasta)   
+          os.system('find '+ args.outdir + "/Results_Integron_Finder_*/ " + '-empty -type d -delete')
+          
+          files = pd.read_csv(args.outdir + "/Results_Integron_Finder_"+strain + "/" + strain+".summary",sep="\t", index_col=0, skiprows = 1)
+          dict_genome.update(files[['CALIN','complete','In0']].sum().to_dict())
+          
+          
         dict_results[strain] = dict_genome
     
+        
     
+        
     table_results = pd.DataFrame(dict_results)
     table_results = table_results.T
     
@@ -396,7 +414,6 @@ if __name__ == "__main__":
         
     results = results.fillna("-")
     
-    #=============================================================================#
     # spuA and narG 
     
     spuA(results, args)
@@ -421,7 +438,6 @@ if __name__ == "__main__":
             writeTemplateStrip (args.outdir, results, family, list_familiesRes)
     
     
-    #=============================================================================#
     
     results.to_csv(args.outdir+"/"+args.outdir.split("/")[-1]+".txt", sep='\t')
     

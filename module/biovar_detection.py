@@ -1,5 +1,7 @@
 import pandas as pd
 
+from module.template_iTOL import writeTemplateBinary, writeTemplateTOX
+
 def spuA(results:pd.DataFrame, arguments):       
     if "spuA" in results.columns:
         SpuA_CLUSTER = ["spuA"]

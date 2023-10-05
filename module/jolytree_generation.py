@@ -1,6 +1,6 @@
 import os
 
-generate_jolytree(arguments)
+def generate_jolytree(arguments): 
         print ("\nGenerating a phylogenetic tree from JolyTree \n")
         os.makedirs(arguments.outdir+"/FolderJolyTree" )
         os.system("cp "+ " ".join(arguments.assemblies) + " " + arguments.outdir+"/FolderJolyTree/")   

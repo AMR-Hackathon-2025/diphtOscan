@@ -1,6 +1,8 @@
 import sys
 import os
 
+from module.download_alleles_st import create_db, download_profiles_st, download_profiles_tox
+
 def update_database(arguments):
     if arguments.update : 
         os.system("rm "+ MLST_db[1] + "* " + MLST_db[2] + "* ")                  
