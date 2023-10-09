@@ -4,7 +4,7 @@ import pandas as pd
 
 from module.mlstBLAST import mlst_blast
 
-def get_chromosome_mlst_results(infoMLST, contigs, cd_complex, args):
+def get_chromosome_mlst_results(infoMLST:tuple, contigs:str, cd_complex:bool, args) -> dict:
     chromosome_mlst_header = infoMLST[0]
     if cd_complex:
         seqs = infoMLST[1]
@@ -25,7 +25,7 @@ def get_chromosome_mlst_results(infoMLST, contigs, cd_complex, args):
     results.update(dict(zip(infoMLST[0], chr_st_detail)))
     return results
 
-def get_tox_results(infoTOX, contigs, args):
+def get_tox_results(infoTOX:tuple, contigs:str, args) -> dict:
     tox_header = infoTOX[0]
     seqs = infoTOX[1]
     database = infoTOX[2]
@@ -42,7 +42,7 @@ def get_tox_results(infoTOX, contigs, args):
     #results.update(dict(zip(infoTOX[0], chr_st_detail)))
     return results
 
-def get_chromosome_mlst_header()-> list:
+def get_chromosome_mlst_header() -> list:
     return ['atpA', 'dnaE', 'dnaK', 'fusA', 'leuA', 'odhA', 'rpoB']
 
 def get_tox_header() -> list:
@@ -75,10 +75,10 @@ def delete_virulence_extended() -> list:
             'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
        
        
-def is_non_zero_file(fpath):  
+def is_non_zero_file(fpath:str):
     return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
 
-def armfinder_to_table(data_resistance):
+def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
     dico_Method = {'ALLELEX' : "",
                    'EXACTX' :  "",
                    'POINTX' : "!",
@@ -111,7 +111,7 @@ def armfinder_to_table(data_resistance):
         table[family][strain] += gene
     return table
 
-def get_genomic_context (outdir, data) :
+def get_genomic_context(outdir:str, data:pd.DataFrame) :
     d = []
     data_AMR = data[~data['Class'].isin( list(set(get_virulence_extended())| set(get_virulence())))]
     fi = open(outdir+'/distance_context.txt', 'a', encoding='utf-8')
@@ -133,7 +133,7 @@ def get_genomic_context (outdir, data) :
     fi.close()        
     return " || ".join(d)
 
-def find_resistance_db (args):
+def find_resistance_db(args):
             files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]
             max_file = max(files, key = os.path.getctime)    
             return max_file 
