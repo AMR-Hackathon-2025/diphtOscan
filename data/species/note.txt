@@ -1,0 +1,2 @@
+module load Mash/2.2
+mash sketch -o species_mash_sketches.msh -l ReferenceCorynebacterium.list

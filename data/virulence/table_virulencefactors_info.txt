@@ -1,0 +1,120 @@
+Class	Virulence factors	Strains	Accession no.	Related genes	Locus
+Adherence	Surface-anchored pilus proteins	C. diphtheriae NCTC13129	NC_002935	sapA	DIP2066
+Adherence	Surface-anchored pilus proteins	C. diphtheriae NCTC13129	NC_002935	sapD	DIP0443
+Adherence	SpaH-type pili	C. diphtheriae NCTC13129	NC_002935	spaG	DIP2227
+Adherence	SpaH-type pili	C. diphtheriae NCTC13129	NC_002935	spaH	DIP2226
+Adherence	SpaH-type pili	C. diphtheriae NCTC13129	NC_002935	srtD	DIP2225
+Adherence	SpaH-type pili	C. diphtheriae NCTC13129	NC_002935	srtE	DIP2224
+Adherence	SpaH-type pili	C. diphtheriae NCTC13129	NC_002935	spaI	DIP2223
+Adherence	SpaD-type pili	C. diphtheriae NCTC13129	NC_002935	spaF	DIP0238
+Adherence	SpaD-type pili	C. diphtheriae NCTC13129	NC_002935	spaE	DIP0237
+Adherence	SpaD-type pili	C. diphtheriae NCTC13129	NC_002935	srtC	DIP0236
+Adherence	SpaD-type pili	C. diphtheriae NCTC13129	NC_002935	spaD	DIP0235
+Adherence	SpaD-type pili	C. diphtheriae NCTC13129	NC_002935	srtB	DIP0233
+Adherence	SpaA-type pili	C. diphtheriae NCTC13129	NC_002935	spaA	DIP2013
+Adherence	SpaA-type pili	C. diphtheriae NCTC13129	NC_002935	srtA	DIP2012
+Adherence	SpaA-type pili	C. diphtheriae NCTC13129	NC_002935	spaB	DIP2011
+Adherence	SpaA-type pili	C. diphtheriae NCTC13129	NC_002935	spaC	DIP2010
+Iron uptake	Siderophore-dependent iron uptake system	C. diphtheriae NCTC13129	NC_002935	irp6C	DIP0110
+Iron uptake	Siderophore-dependent iron uptake system	C. diphtheriae NCTC13129	NC_002935	irp6B	DIP0109
+Iron uptake	Siderophore-dependent iron uptake system	C. diphtheriae NCTC13129	NC_002935	irp6A	DIP0108
+Regulation	Diphtheria toxin repressor DtxR	C. diphtheriae NCTC13129	NC_002935	dtxR	DIP1414
+Toxin	Diphtheria toxin (DT)	C. diphtheriae NCTC13129	NC_002935	tox	DIP0222
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. diphtheriae NCTC13129	NC_002935	ciuE	DIP0586
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. diphtheriae NCTC13129	NC_002935	ciuD	DIP0585
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. diphtheriae NCTC13129	NC_002935	ciuC	DIP0584
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. diphtheriae NCTC13129	NC_002935	ciuB	DIP0583
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. diphtheriae NCTC13129	NC_002935	ciuA	DIP0582
+Iron uptake	ABC-type heme transporter	C. diphtheriae NCTC13129	NC_002935	hmuV	DIP0628
+Iron uptake	ABC-type heme transporter	C. diphtheriae NCTC13129	NC_002935	hmuU	DIP0627
+Iron uptake	ABC-type heme transporter	C. diphtheriae NCTC13129	NC_002935	hmuT	DIP0626
+Iron uptake	ABC transporter	C. diphtheriae NCTC13129	NC_002935	fagD	DIP1062
+Iron uptake	ABC transporter	C. diphtheriae NCTC13129	NC_002935	fagA	DIP1061
+Iron uptake	ABC transporter	C. diphtheriae NCTC13129	NC_002935	fagB	DIP1060
+Iron uptake	ABC transporter	C. diphtheriae NCTC13129	NC_002935	fagC	DIP1059
+Adherence	SpaH-type pili	C. efficiens YS-314	NC_004369	srtD	CE2454
+Adherence	SpaH-type pili	C. efficiens YS-314	NC_004369	srtD	CE2456
+Adherence	SpaA-type pili	C. efficiens YS-314	NC_004369	srtA	CE2738
+Adherence	SpaA-type pili	C. efficiens YS-314	NC_004369	spaA	CE2737
+Adherence	SpaA-type pili	C. efficiens YS-314	NC_004369	spaA	CE2455
+Adherence	SpaA-type pili	C. efficiens YS-314	NC_004369	spaA	CE2457
+Regulation	Diphtheria toxin repressor DtxR	C. efficiens YS-314	NC_004369	dtxR	CE1812
+Iron uptake	ABC-type heme transporter	C. efficiens YS-314	NC_004369	hmuU	CE0694
+Iron uptake	ABC-type heme transporter	C. efficiens YS-314	NC_004369	hmuV	CE0693
+Iron uptake	ABC transporter	C. efficiens YS-314	NC_004369	fagD	CE0687
+Iron uptake	ABC transporter	C. efficiens YS-314	NC_004369	fagA	CE0686
+Iron uptake	ABC transporter	C. efficiens YS-314	NC_004369	fagB	CE0685
+Iron uptake	ABC transporter	C. efficiens YS-314	NC_004369	fagC	CE0684
+Regulation	Diphtheria toxin repressor DtxR	C. glutamicum ATCC 13032	NC_003450	dtxR	NCgl1845
+Iron uptake	ABC-type heme transporter	C. glutamicum ATCC 13032	NC_003450	hmuV	NCgl0380
+Iron uptake	ABC-type heme transporter	C. glutamicum ATCC 13032	NC_003450	hmuU	NCgl0379
+Iron uptake	ABC-type heme transporter	C. glutamicum ATCC 13032	NC_003450	hmuT	NCgl0378
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032	NC_003450	fagD	NCgl2970
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032	NC_003450	fagA	NCgl0484
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032	NC_003450	fagB	NCgl0483
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032	NC_003450	fagC	NCgl0482
+Regulation	Diphtheria toxin repressor DtxR	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	dtxR	cg2103
+Iron uptake	ABC-type heme transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	hmuV	cg0469
+Iron uptake	ABC-type heme transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	hmuU	cg0468
+Iron uptake	ABC-type heme transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	hmuT	cg0467
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	fagD	cg3404
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	fagA	cg0591
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	fagB	cg0590
+Iron uptake	ABC transporter	C. glutamicum ATCC 13032 (DSM 20300)	NC_006958	fagC	cg0589
+Adherence	SpaH-type pili	C. glutamicum R	NC_009342	spaH	cgR_2791
+Adherence	SpaH-type pili	C. glutamicum R	NC_009342	srtE	cgR_2790
+Adherence	SpaH-type pili	C. glutamicum R	NC_009342	srtE	cgR_2793
+Adherence	SpaD-type pili	C. glutamicum R	NC_009342	spaD	cgR_2789
+Regulation	Diphtheria toxin repressor DtxR	C. glutamicum R	NC_009342	dtxR	cgR_1750
+Iron uptake	ABC-type heme transporter	C. glutamicum R	NC_009342	hmuV	cgR_0464
+Iron uptake	ABC-type heme transporter	C. glutamicum R	NC_009342	hmuU	cgR_0463
+Iron uptake	ABC-type heme transporter	C. glutamicum R	NC_009342	hmuT	cgR_0462
+Iron uptake	ABC transporter	C. glutamicum R	NC_009342	fagD	cgR_2963
+Iron uptake	ABC transporter	C. glutamicum R	NC_009342	fagA	cgR_0602
+Iron uptake	ABC transporter	C. glutamicum R	NC_009342	fagB	cgR_0601
+Iron uptake	ABC transporter	C. glutamicum R	NC_009342	fagC	cgR_0600
+Adherence	Surface-anchored pilus proteins	C. jeikeium K411	NC_007164	sapD	jk1856
+Adherence	Surface-anchored pilus proteins	C. jeikeium K411	NC_007164	sapA	jk1702
+Adherence	Surface-anchored pilus proteins	C. jeikeium K411	NC_007164	sapE	jk0007
+Adherence	SpaD-type pili	C. jeikeium K411	NC_007164	spaD	jk1701
+Adherence	SpaD-type pili	C. jeikeium K411	NC_007164	srtC	jk1700
+Adherence	SpaD-type pili	C. jeikeium K411	NC_007164	spaE	jk1699
+Iron uptake	Siderophore-dependent iron uptake system	C. jeikeium K411	NC_007164	irp6A	jk0561
+Iron uptake	Siderophore-dependent iron uptake system	C. jeikeium K411	NC_007164	irp6B	jk0560
+Iron uptake	Siderophore-dependent iron uptake system	C. jeikeium K411	NC_007164	irp6C	jk0559
+Regulation	Diphtheria toxin repressor DtxR	C. jeikeium K411	NC_007164	dtxR	jk1097
+Adherence	Collagen-binding protein	C. jeikeium K411	NC_007164	cbpA	jk0461
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. jeikeium K411	NC_007164	ciuA	jk1296
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. jeikeium K411	NC_007164	ciuB	jk1295
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. jeikeium K411	NC_007164	ciuC	jk1294
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. jeikeium K411	NC_007164	ciuD	jk1293
+Iron uptake	ABC-type heme transporter	C. jeikeium K411	NC_007164	hmuV	jk0318
+Iron uptake	ABC-type heme transporter	C. jeikeium K411	NC_007164	hmuU	jk0317
+Iron uptake	ABC-type heme transporter	C. jeikeium K411	NC_007164	hmuT	jk0316
+Iron uptake	ABC transporter	C. jeikeium K411	NC_007164	fagD	jk1776
+Iron uptake	ABC transporter	C. jeikeium K411	NC_007164	fagC	jk1774
+Iron uptake	ABC transporter	C. jeikeium K411	NC_007164	fagB	jk1773
+Iron uptake	ABC transporter	C. jeikeium K411	NC_007164	fagA	jk1772
+Adherence	Surface-anchored pilus proteins	C. pseudotuberculosis FRC41	NC_014329	sapA	cpfrc_01870
+Adherence	SpaH-type pili	C. pseudotuberculosis FRC41	NC_014329	spaI	cpfrc_01904
+Adherence	SpaD-type pili	C. pseudotuberculosis FRC41	NC_014329	srtB	cpfrc_01875
+Adherence	SpaD-type pili	C. pseudotuberculosis FRC41	NC_014329	spaD	cpfrc_01874
+Adherence	SpaD-type pili	C. pseudotuberculosis FRC41	NC_014329	srtC	cpfrc_01873
+Adherence	SpaA-type pili	C. pseudotuberculosis FRC41	NC_014329	srtA	cpfrc_01905
+Adherence	SpaA-type pili	C. pseudotuberculosis FRC41	NC_014329	spaC	cpfrc_01901
+Adherence	SpaA-type pili	C. pseudotuberculosis FRC41	NC_014329	spaC	cpfrc_01902
+Adherence	SpaA-type pili	C. pseudotuberculosis FRC41	NC_014329	spaC	cpfrc_01903
+Toxin	Phospholipase D	C. pseudotuberculosis FRC41	NC_014329	pld	cpfrc_00029
+Regulation	Diphtheria toxin repressor DtxR	C. pseudotuberculosis FRC41	NC_014329	dtxR	cpfrc_01219
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. pseudotuberculosis FRC41	NC_014329	ciuE	cpfrc_00991
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. pseudotuberculosis FRC41	NC_014329	ciuD	cpfrc_00990
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. pseudotuberculosis FRC41	NC_014329	ciuC	cpfrc_00989
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. pseudotuberculosis FRC41	NC_014329	ciuB	cpfrc_00988
+Iron uptake	Ciu iron uptake and siderophore biosynthesis system	C. pseudotuberculosis FRC41	NC_014329	ciuA	cpfrc_00987
+Iron uptake	ABC-type heme transporter	C. pseudotuberculosis FRC41	NC_014329	hmuV	cpfrc_00457
+Iron uptake	ABC-type heme transporter	C. pseudotuberculosis FRC41	NC_014329	hmuU	cpfrc_00456
+Iron uptake	ABC-type heme transporter	C. pseudotuberculosis FRC41	NC_014329	hmuT	cpfrc_00455
+Iron uptake	ABC transporter	C. pseudotuberculosis FRC41	NC_014329	fagD	cpfrc_00033
+Iron uptake	ABC transporter	C. pseudotuberculosis FRC41	NC_014329	fagA	cpfrc_00032
+Iron uptake	ABC transporter	C. pseudotuberculosis FRC41	NC_014329	fagB	cpfrc_00031
+Iron uptake	ABC transporter	C. pseudotuberculosis FRC41	NC_014329	fagC	cpfrc_00030
