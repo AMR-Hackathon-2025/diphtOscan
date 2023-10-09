@@ -105,8 +105,7 @@ import subprocess
 sys.path.append('/module')
 
 from module.species import get_species_results, is_cd_complex
-from module.template_iTOL import writeTemplateStrip
-from module.biovar_detection import spuA, narG, toxin
+from module.template_iTOL import spuA, narG, toxin, amr_families
 from module.updating_database import update_database
 from module.jolytree_generation import generate_jolytree
 
@@ -192,9 +191,8 @@ def parse_arguments():
     args.extract = False    
     args.path = os.path.dirname(os.path.abspath(__file__))  
     
-    return args 
-
-
+    #Message d'éerreur plus explicite 
+    #M^me chose avec jolly tree 
     if args.integron: 
         rc = subprocess.call(["command", "-v", "integron_finder"])
         if rc == 0:
@@ -202,6 +200,11 @@ def parse_arguments():
         else:
             print('integron_finder missing in path!')
             args.integron = False
+
+    return args 
+
+
+
  
 if __name__ == "__main__":
       
@@ -211,7 +214,7 @@ if __name__ == "__main__":
     MLST_db = (get_chromosome_mlst_header(), args.path + '/data/mlst/pubmlst_diphtheria_seqdef_scheme_3.fas', args.path + '/data/mlst/st_profiles.txt') 
     TOX_db = (get_tox_header(), args.path + '/data/tox/pubmlst_diphtheria_seqdef_scheme_4.fas', args.path + '/data/tox/tox_profiles.txt') 
 
-    update_database(args)
+    update_database(args,MLST_db,TOX_db)
     
     resistance_db = find_resistance_db(args) 
     prediction_db = args.path +"/data/virulence"
@@ -233,8 +236,7 @@ if __name__ == "__main__":
             dict_genome.update(get_tox_results(TOX_db, fasta, args))
             
         if args.resistance_virulence :   
-            min_identity = "-1" # defaut amrfinder
-            #min_coverage = "0.8" # defaut amrfinder                
+            min_identity = "-1" # Defaut amrfinder
             os.system('amrfinder --nucleotide ' + fasta +
                       ' --name '+strain+
                       ' --nucleotide_output ' + args.outdir + "/" + strain + ".prot.fa" +
@@ -283,32 +285,14 @@ if __name__ == "__main__":
         results = table_results
         
     results = results.fillna("-")
-    
-    # spuA and narG 
-    
+        
     spuA(results, args)
     narG(results, args)
     toxin(results, args)
-    
-    # ARM
-    list_familiesRes ={'AMINOGLYCOSIDE' : ['#a6cee3', '#1f78b4'],
-                            'MACROLIDE' : ['#b2df8a', '#33a02c'],
-                             'PHENICOL' : ['#fb9a99', '#e31a1c'],
-                          'SULFONAMIDE' : ['#fdbf6f', '#ff7f00'],
-                         'TETRACYCLINE' : ['#cab2d6', "#6a3d9a"],
-                         'TRIMETHOPRIM' : ['#ffff99', '#b15928'],
-                  'QUATERNARY AMMONIUM' : ["#e0eaf4", "#3c6498"],
-                          'BETA-LACTAM' : ["#da74da", "#9e3c8b"],
-                            'QUINOLONE' : ["#b0c665", "#6c7b38"],
-                            'RIFAMYCIN' : ["#bd924f", "#926114"]}
-
-    for family in list_familiesRes : 
-        if family in results.columns:
-            writeTemplateStrip (args.outdir, results, family, list_familiesRes)
+    amr_families(results, args)
     
     results.to_csv(args.outdir+"/"+args.outdir.split("/")[-1]+".txt", sep='\t')
     
     if args.tree and len(args.assemblies) >= 4 :
         generate_jolytree(args)
-
-        
+  

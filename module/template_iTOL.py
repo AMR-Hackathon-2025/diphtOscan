@@ -15,7 +15,6 @@ import os
 import pandas as pd 
 
 
-
 def get_BINARY_header():   
     header_BINARY = """DATASET_BINARY
 SEPARATOR COMMA
@@ -80,8 +79,6 @@ def writeTemplateBinary (outdir, file, column, values, colors, symbols):
     return data
 
 
-
-
 def writeTemplateTOX (outdir, file, column):
     f = open(outdir+'/'+column.replace('/','_')+".txt", 'w', encoding='utf-8')
     f.write(get_TOX_header())
@@ -112,12 +109,39 @@ def writeTemplateStrip (outdir, file, column, list_familiesRes):
     f.close()
     return 
 
+def spuA(results:pd.DataFrame, arguments):       
+    if "spuA" in results.columns:
+        SpuA_CLUSTER = ["spuA"]
+        SpuA_CLUSTER_color = ['#002b00']
+        SpuA_CLUSTER_symbol = ["2"]
+        writeTemplateBinary(arguments.outdir , results, "spuA", SpuA_CLUSTER, SpuA_CLUSTER_color, SpuA_CLUSTER_symbol)
 
-       
+        
+def narG(results:pd.DataFrame, arguments):  
+    if "narG" in results.columns:
+        narIJHGK = ["narG"]
+        narIJHGK_color = ['#f1c40f']
+        narIJHGK_symbol = ["2"]
+        writeTemplateBinary(arguments.outdir, results, "narG", narIJHGK, narIJHGK_color, narIJHGK_symbol)
 
 
+def toxin(results:pd.DataFrame, arguments):  
+    if "TOXIN" in results.columns:
+        writeTemplateTOX(arguments.outdir, results, 'TOXIN')
 
+list_familiesRes ={'AMINOGLYCOSIDE' : ['#a6cee3', '#1f78b4'],
+                   'MACROLIDE' : ['#b2df8a', '#33a02c'],
+                   'PHENICOL' : ['#fb9a99', '#e31a1c'],
+                   'SULFONAMIDE' : ['#fdbf6f', '#ff7f00'],
+                   'TETRACYCLINE' : ['#cab2d6', "#6a3d9a"],
+                   'TRIMETHOPRIM' : ['#ffff99', '#b15928'],
+                   'QUATERNARY AMMONIUM' : ["#e0eaf4", "#3c6498"],
+                   'BETA-LACTAM' : ["#da74da", "#9e3c8b"],
+                   'QUINOLONE' : ["#b0c665", "#6c7b38"],
+                   'RIFAMYCIN' : ["#bd924f", "#926114"]
+                   }
 
-     
-
-
+def amr_families(results:pd.DataFrame, arguments):
+    for family in list_familiesRes : 
+        if family in results.columns:
+            writeTemplateStrip (arguments.outdir, results, family, list_familiesRes)
