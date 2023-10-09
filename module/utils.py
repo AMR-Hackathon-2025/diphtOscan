@@ -1,5 +1,6 @@
 import os
 import glob
+import pandas as pd
 
 from module.mlstBLAST import mlst_blast
 
