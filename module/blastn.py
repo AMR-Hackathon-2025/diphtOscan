@@ -57,6 +57,7 @@ class BlastHit(object):
         else:
             return nucl_seq, self.ref_start, self.ref_end
 
+
 def run_blastn(db:str, query:str, min_cov:float, min_ident:float) -> list:
     build_blast_database_if_needed(db)
 
@@ -128,6 +129,7 @@ def hits_overlap(a:BlastHit, b:BlastHit) -> bool:
         return overlap_size > allowed_overlap
     else:
         return False
+
 
 def build_blast_database_if_needed(seqs:str):
     if not os.path.exists(seqs + '.nin'):
