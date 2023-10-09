@@ -72,9 +72,6 @@ def is_cd_complex(results:dict) -> bool:
     """
     Returns True if the species call is in the Cd-complex, otherwise false.
     """
-    print("___ is_cd_complex Function _____ ")
-    print(f"results Type : {type(results)} ")
-
     assert 'species' in results
     species = results['species']
     if species.startswith('C. diphtheriae'):
@@ -88,4 +85,3 @@ def is_cd_complex(results:dict) -> bool:
     if species.startswith('C. pseudotuberculosis'):
         return True
     return False
-
