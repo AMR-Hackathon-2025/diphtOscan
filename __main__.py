@@ -228,7 +228,8 @@ if __name__ == "__main__":
         fasta =  get_path +'/'+genome
         dict_genome =  get_species_results(fasta, args.path + '/data/species', str(args.threads))   
         
-        if args.mlst : 
+        if args.mlst :
+            print("MLST YES") 
             cd_complex = is_cd_complex(dict_genome)
             dict_genome.update(get_chromosome_mlst_results(MLST_db, fasta, cd_complex, args))
         
