@@ -10,8 +10,9 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 details. You should have received a copy of the GNU General Public License along with Kleborate. If
 not, see <http://www.gnu.org/licenses/>.
+
+Some functions initially present in Kleborate have been removed because they were not being used. 
 """
-# TODO : Update Copyright
 
 import gzip
 import sys

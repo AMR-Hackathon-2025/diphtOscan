@@ -13,7 +13,8 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 """
-Copyright 2022 Melanie Hennart (melanie.hennart@pasteur.fr)
+Copyright 2023 Melanie Hennart (melanie.hennart@pasteur.fr)
+Copyright 2023 Martin Rethoret Pasty (martin.rethoret-pasty@pasteur.fr)
 https://gitlab.pasteur.fr/BEBP
 
 This file is part of diphtOscan. diphtOscan is free software: you can redistribute it and/or modify

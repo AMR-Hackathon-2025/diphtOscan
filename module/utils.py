@@ -4,6 +4,54 @@ import pandas as pd
 
 from module.mlstBLAST import mlst_blast
 
+def find_resistance_db(args):
+            files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]
+            max_file = max(files, key = os.path.getctime)    
+            return max_file 
+
+
+def is_non_zero_file(fpath:str):
+    return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
+
+
+def get_chromosome_mlst_header() -> list:
+    return ['atpA', 'dnaE', 'dnaK', 'fusA', 'leuA', 'odhA', 'rpoB']
+
+
+def get_tox_header() -> list:
+    return ['tox']
+
+
+def get_virulence() -> list:
+    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
+            'spuA', 'narG',
+            'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
+            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
+            'VIRULENCE/ADHESIN', 
+            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN', 'iusABCDE',
+            'chtAB','htaA-hmuTUV-htaBC', 'cdtQP-sidBA-ddpABCD']
+    
+
+def get_virulence_extended() -> list: 
+    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
+            'SpuA-CLUSTER', 'narIJHK',
+            'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
+            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
+            'VIRULENCE/ADHESIN', 
+            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
+            'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
+            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
+
+
+def delete_virulence_extended() -> list:
+    return [ 'SpuA-CLUSTER','narIJHK','SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
+            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
+            'VIRULENCE/ADHESIN', 
+            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
+            'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
+            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
+
+
 def get_chromosome_mlst_results(infoMLST:tuple, contigs:str, cd_complex:bool, args) -> dict:
     chromosome_mlst_header = infoMLST[0]
     if cd_complex:
@@ -25,6 +73,7 @@ def get_chromosome_mlst_results(infoMLST:tuple, contigs:str, cd_complex:bool, ar
     results.update(dict(zip(infoMLST[0], chr_st_detail)))
     return results
 
+
 def get_tox_results(infoTOX:tuple, contigs:str, args) -> dict:
     tox_header = infoTOX[0]
     seqs = infoTOX[1]
@@ -42,41 +91,6 @@ def get_tox_results(infoTOX:tuple, contigs:str, args) -> dict:
     #results.update(dict(zip(infoTOX[0], chr_st_detail)))
     return results
 
-def get_chromosome_mlst_header() -> list:
-    return ['atpA', 'dnaE', 'dnaK', 'fusA', 'leuA', 'odhA', 'rpoB']
-
-def get_tox_header() -> list:
-    return ['tox']
-
-def get_virulence() -> list:
-    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
-            'spuA', 'narG',
-            'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
-            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
-            'VIRULENCE/ADHESIN', 
-            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN', 'iusABCDE',
-            'chtAB','htaA-hmuTUV-htaBC', 'cdtQP-sidBA-ddpABCD']
-    
-def get_virulence_extended() -> list: 
-    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
-            'SpuA-CLUSTER', 'narIJHK',
-            'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
-            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
-            'VIRULENCE/ADHESIN', 
-            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
-            'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
-            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
-def delete_virulence_extended() -> list:
-    return [ 'SpuA-CLUSTER','narIJHK','SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
-            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
-            'VIRULENCE/ADHESIN', 
-            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
-            'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
-            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
-       
-       
-def is_non_zero_file(fpath:str):
-    return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
 
 def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
     dico_Method = {'ALLELEX' : "",
@@ -111,6 +125,7 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
         table[family][strain] += gene
     return table
 
+
 def get_genomic_context(outdir:str, data:pd.DataFrame) :
     d = []
     data_AMR = data[~data['Class'].isin( list(set(get_virulence_extended())| set(get_virulence())))]
@@ -132,8 +147,3 @@ def get_genomic_context(outdir:str, data:pd.DataFrame) :
             d.append(t)
     fi.close()        
     return " || ".join(d)
-
-def find_resistance_db(args):
-            files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]
-            max_file = max(files, key = os.path.getctime)    
-            return max_file 
