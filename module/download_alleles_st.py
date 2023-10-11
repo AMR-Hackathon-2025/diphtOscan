@@ -23,7 +23,7 @@ import io
 
 BASE_URI = 'https://bigsdb.pasteur.fr/api'
 
-def download_alleles(database: str, scheme_id: str, folder: str) -> list:
+def download_alleles(database:str, scheme_id:str, folder:str) -> list:
     """
     Parameters
     ----------

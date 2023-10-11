@@ -126,7 +126,7 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
     return table
 
 
-def get_genomic_context(outdir:str, data:pd.DataFrame) :
+def get_genomic_context(outdir:str, data:pd.DataFrame):
     d = []
     data_AMR = data[~data['Class'].isin( list(set(get_virulence_extended())| set(get_virulence())))]
     fi = open(outdir+'/distance_context.txt', 'a', encoding='utf-8')

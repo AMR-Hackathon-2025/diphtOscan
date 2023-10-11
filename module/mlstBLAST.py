@@ -233,7 +233,7 @@ def process_spurious_hits(hits:List[BlastHit]) -> list:
     return hit_strings
 
 
-def load_st_database(database :str, info_arg:str) -> tuple:
+def load_st_database(database:str, info_arg:str) -> tuple:
     st_names = []
     alleles_to_st = {}  # key = concatenated string of alleles, value = st
     st_to_info = {}  # key = st, value = info relating to this ST, eg clonal group
