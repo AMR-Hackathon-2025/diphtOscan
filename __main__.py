@@ -104,6 +104,7 @@ import subprocess
 
 sys.path.append('/module')
 
+from typing import List
 from module.species import get_species_results, is_cd_complex
 from module.template_iTOL import spuA, narG, toxin, amr_families
 from module.updating_database import update_database
@@ -121,7 +122,19 @@ from module.utils import (
     armfinder_to_table,
     get_genomic_context,
     find_resistance_db )
-        
+
+def test_dependency(name:str):
+    return subprocess.call(["command", "-v", name])
+
+
+def test_multiple_dependancies(dependancies:List[str]):
+    for dependancy in dependancies:
+        rc = test_dependency(dependancy)
+        if rc == 1:
+            print(f'/!\ Warning /!\ : {dependancy} missing in path!')
+            sys.exit(-1)
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description='diphtOscan: a tool for characterising '
                                                  'virulence and resistance in Corynebacterium',
@@ -189,18 +202,31 @@ def parse_arguments():
 
     args = parser.parse_args()
     args.extract = False    
-    args.path = os.path.dirname(os.path.abspath(__file__))  
-    
-    #Message d'éerreur plus explicite 
-    #M^me chose avec jolly tree 
+    args.path = os.path.dirname(os.path.abspath(__file__))
+
+    diphtoscan_dependancies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
+    joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
+    joly_tree_dependancies = ["gawk",'fastme','REQ']
+
+    print("Dependency testing")
+    test_multiple_dependancies(diphtoscan_dependancies)
+
     if args.integron: 
-        rc = subprocess.call(["command", "-v", "integron_finder"])
+        rc = test_dependency("integron_finder")
         if rc == 0:
             args.integron = True
         else:
-            print('integron_finder missing in path!')
+            print('/!\ Warning /!\ : integron_finder missing in path! Integron analysis not carried out.')
             args.integron = False
 
+    if args.tree:
+        if os.path.isfile(joly_tree_path):
+            test_multiple_dependancies(joly_tree_dependancies)
+            args.tree = True
+        else:
+            print('/!\ Warning /!\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out  ')
+            args.tree = False
+    print('\n')
     return args 
 
 
