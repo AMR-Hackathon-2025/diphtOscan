@@ -123,16 +123,43 @@ from module.utils import (
     get_genomic_context,
     find_resistance_db )
 
-def test_dependency(name:str):
+def test_unique_dependency(name:str):
     return subprocess.call(["command", "-v", name])
 
 
 def test_multiple_dependancies(dependancies:List[str]):
     for dependancy in dependancies:
-        rc = test_dependency(dependancy)
+        rc = test_unique_dependency(dependancy)
         if rc == 1:
             print(f'/!\ Warning /!\ : {dependancy} missing in path!')
             sys.exit(-1)
+
+def test_required_dependancy(args):
+    diphtoscan_dependancies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
+    joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
+    joly_tree_dependancies = ["gawk",'fastme','REQ']
+
+    print("Dependency testing")
+    test_multiple_dependancies(diphtoscan_dependancies)
+
+    if args.integron: 
+        rc = test_unique_dependency("integron_finder")
+        if rc == 0:
+            args.integron = True
+        else:
+            print('/!\ Warning /!\ : integron_finder missing in path! Integron analysis not carried out.')
+            args.integron = False
+
+    if args.tree:
+        if os.path.isfile(joly_tree_path):
+            test_multiple_dependancies(joly_tree_dependancies)
+            args.tree = True
+        else:
+            print('/!\ Warning /!\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
+            args.tree = False
+    print('\n')
+    return args
+
 
 
 def parse_arguments():
@@ -204,29 +231,8 @@ def parse_arguments():
     args.extract = False    
     args.path = os.path.dirname(os.path.abspath(__file__))
 
-    diphtoscan_dependancies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
-    joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
-    joly_tree_dependancies = ["gawk",'fastme','REQ']
-
-    print("Dependency testing")
-    test_multiple_dependancies(diphtoscan_dependancies)
-
-    if args.integron: 
-        rc = test_dependency("integron_finder")
-        if rc == 0:
-            args.integron = True
-        else:
-            print('/!\ Warning /!\ : integron_finder missing in path! Integron analysis not carried out.')
-            args.integron = False
-
-    if args.tree:
-        if os.path.isfile(joly_tree_path):
-            test_multiple_dependancies(joly_tree_dependancies)
-            args.tree = True
-        else:
-            print('/!\ Warning /!\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out  ')
-            args.tree = False
-    print('\n')
+    args = test_required_dependancy(args)
+   
     return args 
 
 
