@@ -23,7 +23,7 @@ def get_tox_header() -> list:
 
 
 def get_virulence() -> list:
-    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
+    return ['REPRESSOR','TOXIN','OTHER_TOXINS', 
             'spuA', 'narG',
             'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
             'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
@@ -33,7 +33,7 @@ def get_virulence() -> list:
     
 
 def get_virulence_extended() -> list: 
-    return ['REPRESSOR','TOXIN','OTHERS_TOXIN', 
+    return ['REPRESSOR','TOXIN','OTHER_TOXINS', 
             'SpuA-CLUSTER', 'narIJHK',
             'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
             'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
