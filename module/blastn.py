@@ -15,6 +15,7 @@ not, see <http://www.gnu.org/licenses/>.
 import os
 import subprocess
 
+from typing import List
 from .misc import reverse_complement
 
 
@@ -58,7 +59,7 @@ class BlastHit(object):
             return nucl_seq, self.ref_start, self.ref_end
 
 
-def run_blastn(db:str, query:str, min_cov:float, min_ident:float) -> list:
+def run_blastn(db:str, query:str, min_cov:float, min_ident:float) -> List[BlastHit]:
     build_blast_database_if_needed(db)
 
     cmd = 'blastn -task blastn -db {} -query {}'.format(db, query)
@@ -90,7 +91,7 @@ def run_blastn(db:str, query:str, min_cov:float, min_ident:float) -> list:
     return blast_hits
 
 
-def cull_redundant_hits(blast_hits:list) -> list:
+def cull_redundant_hits(blast_hits:list) -> List[BlastHit]:
     """
     Cull out redundant hits here (essentially implementing BLAST's -culling_limit 1 feature but
     with our own logic).

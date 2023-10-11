@@ -141,7 +141,6 @@ def test_required_dependancy(args):
 
     print("Dependency testing")
     test_multiple_dependancies(diphtoscan_dependancies)
-
     if args.integron: 
         rc = test_unique_dependency("integron_finder")
         if rc == 0:
