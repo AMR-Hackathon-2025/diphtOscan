@@ -20,9 +20,4 @@ def update_database(arguments, mlst_database:tuple, tox_database:tuple):
         print ('bash ' + arguments.path + '/data/resistance/update_database_resistance.sh')
         os.system('bash ' + arguments.path + '/data/resistance/update_database_resistance.sh')
         print("   ... done \n\n\n")
-    try:
-        os.makedirs(arguments.outdir)
-        print("Directory '%s' created successfully \n" %arguments.outdir)
-    except OSError :
-        print("Directory '%s' can not be created \n"  %arguments.outdir)        
-        sys.exit(0)
+        

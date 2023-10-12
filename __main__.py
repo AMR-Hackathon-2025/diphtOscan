@@ -114,9 +114,7 @@ from module.utils import (
     get_chromosome_mlst_results, 
     get_tox_results, 
     get_chromosome_mlst_header, 
-    get_tox_header, 
-    get_virulence, 
-    get_virulence_extended,
+    get_tox_header,
     delete_virulence_extended,
     is_non_zero_file,
     armfinder_to_table,
@@ -134,19 +132,26 @@ def test_multiple_dependancies(dependancies:List[str]):
             print(f'/!\ Warning /!\ : {dependancy} missing in path!')
             sys.exit(-1)
 
+
 def test_required_dependancy(args):
     diphtoscan_dependancies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
     joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
     joly_tree_dependancies = ["gawk",'fastme','REQ']
+    integron_fender_dependancies = ['hmmsearch', 'cmsearch', 'prodigal']
+    
+    if args.assemblies == None: #TODO :Ensure that dependencies are not required to update the database
+        return args
 
-    print("Dependency testing")
+    subprocess.run(["echo", "Dependency testing"])
     test_multiple_dependancies(diphtoscan_dependancies)
+    
     if args.integron: 
         rc = test_unique_dependency("integron_finder")
+        test_multiple_dependancies(integron_fender_dependancies)
         if rc == 0:
             args.integron = True
         else:
-            print('/!\ Warning /!\ : integron_finder missing in path! Integron analysis not carried out.')
+            print('/!\\ Warning /!\\ : integron_finder missing in path! Integron analysis not carried out.')
             args.integron = False
 
     if args.tree:
@@ -154,11 +159,10 @@ def test_required_dependancy(args):
             test_multiple_dependancies(joly_tree_dependancies)
             args.tree = True
         else:
-            print('/!\ Warning /!\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
+            print('/!\\ Warning /!\\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
             args.tree = False
     print('\n')
     return args
-
 
 
 def parse_arguments():
@@ -231,7 +235,6 @@ def parse_arguments():
     args.path = os.path.dirname(os.path.abspath(__file__))
 
     args = test_required_dependancy(args)
-   
     return args 
 
 
@@ -245,9 +248,19 @@ if __name__ == "__main__":
 
     update_database(args,MLST_db,TOX_db)
     
+    if args.assemblies == None:
+        sys.exit(0)
+
     resistance_db = find_resistance_db(args) 
     prediction_db = args.path +"/data/virulence"
     
+    try:
+        os.makedirs(args.outdir)
+        print("Directory '%s' created successfully \n" %args.outdir)
+    except OSError :
+        print("Directory '%s' can not be created \n"  %args.outdir)        
+        sys.exit(0)
+
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
