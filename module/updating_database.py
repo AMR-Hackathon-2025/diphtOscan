@@ -17,7 +17,6 @@ def update_database(arguments, mlst_database:tuple, tox_database:tuple):
         download_profiles_tox ("pubmlst_diphtheria_seqdef", "4", arguments.path +"/data/tox")
         print("   ... done \n")
         
-        print ('bash ' + arguments.path + '/data/resistance/update_database_resistance.sh')
         os.system('bash ' + arguments.path + '/data/resistance/update_database_resistance.sh')
         print("   ... done \n\n\n")
         
