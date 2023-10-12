@@ -34,14 +34,15 @@
 """
 diphtOscan is a tool to screen genome assemblies of the diphtheriae species 
 complex (DiphSC) for:
-     - Species (e.g. C. diphtheriae, C. belfantii, C. rouxii, C. ulcerans 
-                and C. pseudotuberculosis)
+     - Species (e.g. C. diphtheriae, C. belfantii, C. rouxii, C. ulcerans, 
+                C. ramonii and C. pseudotuberculosis)
+     - Biovar-associated genes
      - MLST sequence type
-     - Virulence loci 
-     - Antimicrobial resistance: acquired genes, SNPs
-     - Biovar prediction
-     - Detection of tox gene 
-
+     - Virulence factors 
+     - Antimicrobial resistance: acquired genes, SNPs & genomic context
+     - Detection of tox gene (Presence/Absence & Allele)
+     - Detection of integrons (Integron_Finder)
+     - Tree building (JolyTree)
 Usage:
 ======
     python diphtOscan.py argument1 argument2
@@ -50,11 +51,11 @@ Usage:
     argument2: une chaîne de caractères décrivant un bidule
 """
 
-__authors__ = ("Melanie HENNART")
-__contact__ = ("melanie.hennart@pasteur.fr")
-__version__ = "1.2.0"
+__authors__ = ("Melanie HENNART; Martin RETHORET-PASTY")
+__contact__ = ("melanie.hennart@pasteur.fr; martin.rethoret-pasty@pasteur.fr")
+__version__ = "1.3.0"
 __copyright__ = "copyleft"
-__date__ = "2023/04/12"
+__date__ = "2023/10/12"
 
 ###############################################################################
 #                                                                             #
@@ -125,29 +126,29 @@ def test_unique_dependency(name:str):
     return subprocess.call(["command", "-v", name])
 
 
-def test_multiple_dependancies(dependancies:List[str]):
-    for dependancy in dependancies:
-        rc = test_unique_dependency(dependancy)
+def test_multiple_dependencies(dependencies:List[str]):
+    for dependency in dependencies:
+        rc = test_unique_dependency(dependency)
         if rc == 1:
-            print(f'/!\ Warning /!\ : {dependancy} missing in path!')
+            print(f'/!\ Warning /!\ : {dependency} missing in path!')
             sys.exit(-1)
 
 
-def test_required_dependancy(args):
-    diphtoscan_dependancies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
+def test_required_dependency(args):
+    diphtoscan_dependencies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
     joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
-    joly_tree_dependancies = ["gawk",'fastme','REQ']
-    integron_fender_dependancies = ['hmmsearch', 'cmsearch', 'prodigal']
+    joly_tree_dependencies = ["gawk",'fastme','REQ']
+    integron_fender_dependencies = ['hmmsearch', 'cmsearch', 'prodigal']
     
     if args.assemblies == None: #TODO :Ensure that dependencies are not required to update the database
         return args
 
     subprocess.run(["echo", "Dependency testing"])
-    test_multiple_dependancies(diphtoscan_dependancies)
+    test_multiple_dependencies(diphtoscan_dependencies)
     
     if args.integron: 
         rc = test_unique_dependency("integron_finder")
-        test_multiple_dependancies(integron_fender_dependancies)
+        test_multiple_dependencies(integron_fender_dependencies)
         if rc == 0:
             args.integron = True
         else:
@@ -156,7 +157,7 @@ def test_required_dependancy(args):
 
     if args.tree:
         if os.path.isfile(joly_tree_path):
-            test_multiple_dependancies(joly_tree_dependancies)
+            test_multiple_dependencies(joly_tree_dependencies)
             args.tree = True
         else:
             print('/!\\ Warning /!\\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
@@ -166,14 +167,14 @@ def test_required_dependancy(args):
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='diphtOscan: a tool for characterising '
-                                                 'virulence and resistance in Corynebacterium',
+    parser = argparse.ArgumentParser(description='diphtOscan is a tool to screen genome assemblies '
+                                                 'of the diphtheriae species complex (CdSC)',
                                      add_help=False)
 
     screening_args = parser.add_argument_group('Screening options')
     
     screening_args.add_argument('-u', '--update', action='store_true',
-                                help='Update database MLST et AMR (default: no)')
+                                help='Update database MLST, Tox Allele & AMR (default: no)')
     
     screening_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=('-u' not in sys.argv and '--update' not in sys.argv),
                                help='FASTA file(s) for assemblies') #-a is required only if -u is not present. It allows the user to update the database easily
@@ -234,7 +235,7 @@ def parse_arguments():
     args.extract = False    
     args.path = os.path.dirname(os.path.abspath(__file__))
 
-    args = test_required_dependancy(args)
+    args = test_required_dependency(args)
     return args 
 
 
