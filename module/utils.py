@@ -19,7 +19,7 @@ def get_chromosome_mlst_header() -> list:
 
 
 def get_tox_header() -> list:
-    return ['tox']
+    return ['tox_allele']
 
 
 def get_virulence() -> list:
