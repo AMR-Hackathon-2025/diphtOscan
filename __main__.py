@@ -171,14 +171,18 @@ def parse_arguments():
                                                  'of the diphtheriae species complex (CdSC)',
                                      add_help=False)
 
+    updating_args = parser.add_argument_group('Updating option')
+
+    updating_args.add_argument('-u', '--update', action='store_true',
+                                help='Update database MLST, Tox Allele & AMR (default: no).'
+                                'The database update can be executed on its own without the -a option.')
+    
+    required_args = parser.add_argument_group('Required option')
+    required_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=('-u' not in sys.argv and '--update' not in sys.argv),
+                               help='FASTA file(s) for assemblies. ') #-a is required only if -u is not present. It allows the user to update the database easily
+
     screening_args = parser.add_argument_group('Screening options')
-    
-    screening_args.add_argument('-u', '--update', action='store_true',
-                                help='Update database MLST, Tox Allele & AMR (default: no)')
-    
-    screening_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=('-u' not in sys.argv and '--update' not in sys.argv),
-                               help='FASTA file(s) for assemblies') #-a is required only if -u is not present. It allows the user to update the database easily
-                                
+                             
     screening_args.add_argument('-st', '--mlst', action='store_true',
                                 help='Turn on species Corynebacterium diphtheriae species complex (CdSC)'
                                      ' and MLST sequence type (default: no)')
