@@ -56,17 +56,21 @@ usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-t] [-res_vir] [-plus] [
 
 diphtOscan: a tool for characterising virulence and resistance in Corynebacterium
 
+Updating option:
+  -u, --update          Update database MLST, Tox Allele & AMR (default: no).The database update can be executed on its own without the -a option.
+
 Required arguments:
   -a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]
-                        FASTA file(s) for assemblies
+                        FASTA file(s) for assemblies.
 
 Screening options:
-  -u, --update          Update database MLST et AMR (default: no)
-  -t, --taxonomy        Turn on species Corynebacterium diphtheriae species complex (CdSC) and MLST sequence type
+  -st, --mlst           Turn on species Corynebacterium diphtheriae species complex (CdSC) and MLST sequence type
                         (default: no)
+  -t, --tox             Turn on tox allele (default: no)
   -res_vir, --resistance_virulence
                         Turn on resistance and virulence genes screening (default: no resistance and virulence gene
                         screening)
+ 
   -plus, --extend_genotyping
                         Turn on all virulence genes screening (default: no all virulence gene screening)
   -integron, --integron
