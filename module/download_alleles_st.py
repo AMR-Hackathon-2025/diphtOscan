@@ -23,7 +23,7 @@ import io
 
 BASE_URI = 'https://bigsdb.pasteur.fr/api'
 
-def download_alleles(database, scheme_id, folder):
+def download_alleles(database:str, scheme_id:str, folder:str) -> list:
     """
     Parameters
     ----------
@@ -69,7 +69,7 @@ def download_alleles(database, scheme_id, folder):
     return name_loci
 
 
-def create_db (database, scheme_id, folder)  :
+def create_db (database:str, scheme_id:str, folder:str):
     loci_mlst = download_alleles(database, scheme_id, folder+"/sequences")
     path_loci_mlst = [folder+"/sequences/"+ locus +'.fas' for locus in loci_mlst]
     path_database = folder +"/"+ database +"_scheme_"+ scheme_id+ ".fas"
@@ -77,7 +77,7 @@ def create_db (database, scheme_id, folder)  :
     return path_database, loci_mlst
 
 
-def download_profiles_st (database, scheme_id, folder, loci_mlst) :
+def download_profiles_st (database:str, scheme_id:str, folder:str, loci_mlst:list):
     if folder and not os.path.exists(folder):
         os.makedirs(folder)
     dir = folder or './'
@@ -93,7 +93,7 @@ def download_profiles_st (database, scheme_id, folder, loci_mlst) :
         table_profiles_st[loci_mlst].to_csv(dir + '/st_profiles.txt', sep='\t')  
     return dir + '/st_profiles.txt'
 
-def download_profiles_tox (database, scheme_id, folder) :
+def download_profiles_tox (database:str, scheme_id:str, folder:str):
     if folder and not os.path.exists(folder):
         os.makedirs(folder)
     dir = folder or './'

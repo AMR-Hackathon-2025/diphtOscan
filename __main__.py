@@ -34,14 +34,15 @@
 """
 diphtOscan is a tool to screen genome assemblies of the diphtheriae species 
 complex (DiphSC) for:
-     - Species (e.g. C. diphtheriae, C. belfantii, C. rouxii, C. ulcerans 
-                and C. pseudotuberculosis)
+     - Species (e.g. C. diphtheriae, C. belfantii, C. rouxii, C. ulcerans, 
+                C. ramonii and C. pseudotuberculosis)
+     - Biovar-associated genes
      - MLST sequence type
-     - Virulence loci 
-     - Antimicrobial resistance: acquired genes, SNPs
-     - Biovar prediction
-     - Detection of tox gene 
-
+     - Virulence factors 
+     - Antimicrobial resistance: acquired genes, SNPs & genomic context
+     - Detection of tox gene (Presence/Absence & Allele)
+     - Detection of integrons (Integron_Finder)
+     - Tree building (JolyTree)
 Usage:
 ======
     python diphtOscan.py argument1 argument2
@@ -50,11 +51,11 @@ Usage:
     argument2: une chaîne de caractères décrivant un bidule
 """
 
-__authors__ = ("Melanie HENNART")
-__contact__ = ("melanie.hennart@pasteur.fr")
-__version__ = "1.2.0"
+__authors__ = ("Melanie HENNART; Martin RETHORET-PASTY")
+__contact__ = ("melanie.hennart@pasteur.fr; martin.rethoret-pasty@pasteur.fr")
+__version__ = "1.3.0"
 __copyright__ = "copyleft"
-__date__ = "2023/04/12"
+__date__ = "2023/10/12"
 
 ###############################################################################
 #                                                                             #
@@ -98,162 +99,82 @@ import sys
 import os 
 import pandas as pd
 import datetime
-import glob
 import os.path
 import argparse
 import subprocess
 
 sys.path.append('/module')
 
-from module.download_alleles_st import create_db, download_profiles_st, download_profiles_tox
+from typing import List
 from module.species import get_species_results, is_cd_complex
-from module.mlstBLAST import mlst_blast
-from module.template_iTOL import writeTemplateBinary, writeTemplateTOX, writeTemplateStrip
- 
+from module.template_iTOL import spuA, narG, toxin, amr_families
+from module.updating_database import update_database
+from module.jolytree_generation import generate_jolytree
 
-         
+from module.utils import (
+    get_chromosome_mlst_results, 
+    get_tox_results, 
+    get_chromosome_mlst_header, 
+    get_tox_header,
+    delete_virulence_extended,
+    is_non_zero_file,
+    armfinder_to_table,
+    get_genomic_context,
+    find_resistance_db )
+
+def test_unique_dependency(name:str):
+    return subprocess.call(["command", "-v", name])
+
+
+def test_multiple_dependencies(dependencies:List[str]):
+    for dependency in dependencies:
+        rc = test_unique_dependency(dependency)
+        if rc == 1:
+            print(f'/!\ Warning /!\ : {dependency} missing in path!')
+            sys.exit(-1)
+
+
+def test_required_dependency(args):
+    diphtoscan_dependencies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
+    joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
+    joly_tree_dependencies = ["gawk",'fastme','REQ']
+    integron_fender_dependencies = ['hmmsearch', 'cmsearch', 'prodigal']
     
-def get_chromosome_mlst_results(infoMLST, contigs, cd_complex, args):
-    chromosome_mlst_header = infoMLST[0]
-    if cd_complex:
-        seqs = infoMLST[1]
-        database = infoMLST[2]
-        chr_st, chr_st_detail, _, _ = \
-             mlst_blast(seqs, database, 'no', [contigs], min_cov=args.min_coverage,
-                       min_ident=args.min_identity, max_missing=3, allow_multiple=False)
-        if chr_st != '0':
-            chr_st = 'ST' + chr_st
-        
-        assert len(chromosome_mlst_header) == len(chr_st_detail)
-        results = {'ST': chr_st}
+    if args.assemblies == None: #TODO :Ensure that dependencies are not required to update the database
+        return args
 
-    else:
-        results = {'ST': "NA"}
-        chr_st_detail = ['-'] * len(chromosome_mlst_header)
-
-    results.update(dict(zip(infoMLST[0], chr_st_detail)))
-    return results
-
-def get_tox_results(infoTOX, contigs, args):
-    tox_header = infoTOX[0]
-    seqs = infoTOX[1]
-    database = infoTOX[2]
-    chr_st, chr_st_detail, _, _ = \
-         mlst_blast(seqs, database, 'no', [contigs], min_cov=args.min_coverage,
-                   min_ident=args.min_identity, max_missing=3, allow_multiple=False)
-    if chr_st != '0':
-        chr_st = 'TOX' + chr_st
+    subprocess.run(["echo", "Dependency testing"])
+    test_multiple_dependencies(diphtoscan_dependencies)
     
-    assert len(tox_header) == len(chr_st_detail)
-    results = dict(zip(infoTOX[0], chr_st_detail))
-    
-    return results
+    if args.integron: 
+        rc = test_unique_dependency("integron_finder")
+        test_multiple_dependencies(integron_fender_dependencies)
+        if rc == 0:
+            args.integron = True
+        else:
+            print('/!\\ Warning /!\\ : integron_finder missing in path! Integron analysis not carried out.')
+            args.integron = False
 
-def get_chromosome_mlst_header():
-    return ['atpA', 'dnaE', 'dnaK', 'fusA', 'leuA', 'odhA', 'rpoB']
+    if args.tree:
+        if os.path.isfile(joly_tree_path):
+            test_multiple_dependencies(joly_tree_dependencies)
+            args.tree = True
+        else:
+            print('/!\\ Warning /!\\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
+            args.tree = False
+    print('\n')
+    return args
 
-def get_tox_header():
-    return ['tox_allele']
 
-def get_virulence():
-    return ['REPRESSOR','TOXIN','OTHER_TOXINS', 
-            'spuA', 'narG',
-            'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
-            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
-            'VIRULENCE/ADHESIN', 
-            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN', 'iusABCDE',
-            'chtAB','htaA-hmuTUV-htaBC', 'cdtQP-sidBA-ddpABCD']
-    
-def get_virulence_extended(): 
-    return ['REPRESSOR','TOXIN','OTHER_TOXINS', 
-            'SpuA-CLUSTER', 'narIJHK',
-            'SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
-            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
-            'VIRULENCE/ADHESIN', 
-            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
-            'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
-            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
-def delete_virulence_extended():
-    return [ 'SpuA-CLUSTER','narIJHK','SpaA-type_pili_diphtheriae', 'SpaD-type_pili_diphtheriae',
-            'SpaH-type_pili_diphtheriae', 'SapADE_diphtheriae',
-            'VIRULENCE/ADHESIN', 
-            'irp1ABCD','irp2ABCDEFGHI', 'irp2JKLMN','irp6ABC', 'iusABCDE','iutABCDE',
-            'htaA-hmuTUV-htaBC','hmuO','frgCBAD', 
-            'ciuABCD',  'ciuEFG', 'chtAB','chtC','cdtQP-sidBA-ddpABCD','HbpA']
-       
-       
-def is_non_zero_file(fpath):  
-    return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
-
-def armfinder_to_table(data_resistance):
-    dico_Method = {'ALLELEX' : "",
-                   'EXACTX' :  "",
-                   'POINTX' : "!",
-                   'BLASTX' : "*",
-                   'PARTIALX' : "?",
-                   'PARTIAL_CONTIG_ENDX' : "?$",
-                   'INTERNAL_STOP' :  "#"}
-    data_resistance['Class'] = data_resistance['Class'].fillna ('NoClass')
-    Class = data_resistance['Class'].value_counts().keys()
-    Strains = data_resistance['Name'].value_counts().keys()
-    table = pd.DataFrame('',index=Strains, columns=Class)
-    for res in data_resistance.index : 
-        gene = data_resistance['Gene symbol'][res] + dico_Method[data_resistance['Method'][res]]      
-        if 'tox' in data_resistance['Gene symbol'][res] :    
-            if float(data_resistance['% Coverage of reference sequence'][res]) != 100.00 : 
-                if (data_resistance['Method'][res] == 'BLASTX') :
-                    gene = data_resistance['Gene symbol'][res] + "-NTTB?-"+str(round(100-float(data_resistance['% Coverage of reference sequence'][res])))+"%"              
-                else :
-                    gene = data_resistance['Gene symbol'][res] + "-NTTB" + dico_Method[data_resistance['Method'][res]]             
-        if (data_resistance['Method'][res] == 'PARTIALX') or \
-           (data_resistance['Method'][res] == 'PARTIAL_CONTIG_ENDX') or \
-           (data_resistance['Method'][res] == 'INTERNAL_STOP') : 
-               gene += "-"+str(round(100-float(data_resistance['% Coverage of reference sequence'][res])))+"%"
-        
-        strain = data_resistance['Name'][res]
-        family = data_resistance['Class'][res]
-        
-        if table[family][strain] != '' :
-               table[family][strain] += ";"
-        table[family][strain] += gene
-    return table
-
-def get_genomic_context (outdir, data) :
-    d = []
-    data_AMR = data[~data['Class'].isin( list(set(get_virulence_extended())| set(get_virulence())))]
-    fi = open(outdir+'/distance_context.txt', 'a', encoding='utf-8')
-    for contigs in data_AMR['Contig id'].value_counts().keys() :            
-        table_contigs  = data_AMR[data_AMR['Contig id'] == contigs]
-        
-        if len(table_contigs) == 1 : 
-            d.append(table_contigs['Gene symbol'].value_counts().keys()[0])
-        else:  
-            t = table_contigs['Gene symbol'].iloc[0]
-            for i in range(0,len(table_contigs)-1):
-                dis = int(table_contigs['Start'].iloc[i+1]) - int(table_contigs['Stop'].iloc[i])
-                fi.write(table_contigs['Gene symbol'].iloc[i]+'\t'+table_contigs['Gene symbol'].iloc[i+1]+'\t'+str(abs(dis))+'\n')
-                if abs(dis) <=  8000 :  
-                    t +=  ";" + table_contigs['Gene symbol'].iloc[i+1]
-                else :
-                    t +=  " || " + table_contigs['Gene symbol'].iloc[i+1]                
-            d.append(t)
-    fi.close()        
-    return " || ".join(d)
-
-def find_resistance_db (args):
-            files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]
-            max_file = max(files, key = os.path.getctime)    
-            return max_file 
-        
 def parse_arguments():
-    parser = argparse.ArgumentParser(description='diphtOscan: a tool for characterising '
-                                                 'virulence and resistance in Corynebacterium',
+    parser = argparse.ArgumentParser(description='diphtOscan is a tool to screen genome assemblies '
+                                                 'of the diphtheriae species complex (CdSC)',
                                      add_help=False)
 
     screening_args = parser.add_argument_group('Screening options')
     
     screening_args.add_argument('-u', '--update', action='store_true',
-                                help='Update database MLST et AMR (default: no)')
+                                help='Update database MLST, Tox Allele & AMR (default: no)')
     
     screening_args.add_argument('-a', '--assemblies', nargs='+', type=str, required=('-u' not in sys.argv and '--update' not in sys.argv),
                                help='FASTA file(s) for assemblies') #-a is required only if -u is not present. It allows the user to update the database easily
@@ -277,19 +198,19 @@ def parse_arguments():
                                 help='Screening the intregon(default: no)')
                                      
     output_args = parser.add_argument_group('Output options')
-    
+
      
     output_args.add_argument('-o', '--outdir', type=str, default="results_"+ datetime.datetime.today().strftime("%Y-%m-%d_%I-%M-%S_%p"),
                              help='Folder for detailed output (default: results_YYYY-MM-DD_II-MM-SS_PP)')
-
 
     setting_args = parser.add_argument_group('Settings')
     
     setting_args.add_argument('--min_identity', type=float, default=80.0,
                               help='Minimum alignment identity for main results (default: 80)')
-
+    
     setting_args.add_argument('--min_coverage', type=float, default=50.0,
                               help='Minimum alignment coverage for main results (default: 50)')
+    
     setting_args.add_argument('--threads', type=int, default=4,
                               help='The number of threads to use for processing. (default: 4)')
     
@@ -311,62 +232,36 @@ def parse_arguments():
         sys.exit(1)
 
     args = parser.parse_args()
-    
-    #if args.taxonomy:
-        #args.mlst = True
-    #else :
-        #args.mlst = False
-        
     args.extract = False    
-    args.path = os.path.dirname(os.path.abspath(__file__))  
-    
+    args.path = os.path.dirname(os.path.abspath(__file__))
+
+    args = test_required_dependency(args)
     return args 
 
 
-    if args.integron: 
-        rc = subprocess.call(["command", "-v", "integron_finder"])
-        if rc == 0:
-            args.integron = True
-        else:
-            print('integron_finder missing in path!')
-            args.integron = False
- 
 if __name__ == "__main__":
       
-    #=== Parameters
     args = parse_arguments()
     get_path = os.getcwd()
-    #=== 
-      
+
     MLST_db = (get_chromosome_mlst_header(), args.path + '/data/mlst/pubmlst_diphtheria_seqdef_scheme_3.fas', args.path + '/data/mlst/st_profiles.txt') 
     TOX_db = (get_tox_header(), args.path + '/data/tox/pubmlst_diphtheria_seqdef_scheme_4.fas', args.path + '/data/tox/tox_profiles.txt') 
 
-    if args.update : 
-        os.system("rm "+ MLST_db[1] + "* " + MLST_db[2] + "* ")                  
-        print("Downloading MLST database")
-        path_mlst_sequences, loci_mlst = create_db("pubmlst_diphtheria_seqdef", "3", args.path +"/data/mlst")
-        download_profiles_st ("pubmlst_diphtheria_seqdef", "3", args.path +"/data/mlst", loci_mlst)
-        print("   ... done \n")
-        
-        os.system("rm "+ TOX_db[1] + "* " + TOX_db[2] + "* ")
-        print("Downloading tox database")
-        path_tox_sequences, loci_tox = create_db("pubmlst_diphtheria_seqdef", "4", args.path +"/data/tox")
-        download_profiles_tox ("pubmlst_diphtheria_seqdef", "4", args.path +"/data/tox")
-        print("   ... done \n")
-        
-        print ('bash ' + args.path + '/data/resistance/update_database_resistance.sh')
-        os.system('bash ' + args.path + '/data/resistance/update_database_resistance.sh')
-        print("   ... done \n\n\n")
+    update_database(args,MLST_db,TOX_db)
+    
+    if args.assemblies == None:
+        sys.exit(0)
+
+    resistance_db = find_resistance_db(args) 
+    prediction_db = args.path +"/data/virulence"
+    
     try:
         os.makedirs(args.outdir)
         print("Directory '%s' created successfully \n" %args.outdir)
     except OSError :
         print("Directory '%s' can not be created \n"  %args.outdir)        
         sys.exit(0)
-    
-    resistance_db = find_resistance_db(args) 
-    prediction_db = args.path +"/data/virulence"
-    
+
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
@@ -384,8 +279,7 @@ if __name__ == "__main__":
             dict_genome.update(get_tox_results(TOX_db, fasta, args))
             
         if args.resistance_virulence :   
-            min_identity = "-1" # defaut amrfinder
-            #min_coverage = "0.8" # defaut amrfinder                
+            min_identity = "-1" # Defaut amrfinder
             os.system('amrfinder --nucleotide ' + fasta +
                       ' --name '+strain+
                       ' --nucleotide_output ' + args.outdir + "/" + strain + ".prot.fa" +
@@ -410,86 +304,38 @@ if __name__ == "__main__":
                     ' --outdir '+ args.outdir + "/" +
                     ' --gbk --func-annot --mute '+ fasta)   
           os.system('find '+ args.outdir + "/Results_Integron_Finder_*/ " + '-empty -type d -delete')
-          
+
           files = pd.read_csv(args.outdir + "/Results_Integron_Finder_"+strain + "/" + strain+".summary",sep="\t", index_col=0, skiprows = 1)
           dict_genome.update(files[['CALIN','complete','In0']].sum().to_dict())
           
-          
         dict_results[strain] = dict_genome
-    
-        
-    
-        
+     
     table_results = pd.DataFrame(dict_results)
     table_results = table_results.T
     
     if len(data_resistance.index) != 0 :     
         table_resistance = armfinder_to_table(data_resistance)
-       
         for family in table_resistance.columns:
             table_resistance[family] = table_resistance[family].apply(lambda x : ";".join(sorted(x.split(';'))))
-        
+
         if not args.extend_genotyping : 
             header = [x for x in table_resistance.columns if x not in delete_virulence_extended()] 
             table_resistance = table_resistance[sorted(header)]
-        
+
         table_resistance = table_resistance.replace('','-')    
         results = pd.concat([table_results, table_resistance], axis=1, join='outer')
     else : 
         results = table_results
         
     results = results.fillna("-")
-    
-    #=============================================================================#
-    # spuA and narG 
-    
-    if "spuA" in results.columns:
-        SpuA_CLUSTER = ["spuA"]
-        SpuA_CLUSTER_color = ['#002b00']
-        SpuA_CLUSTER_symbol = ["2"]
-        writeTemplateBinary(args.outdir , results, "spuA", SpuA_CLUSTER, SpuA_CLUSTER_color, SpuA_CLUSTER_symbol)
         
-    if "narG" in results.columns:
-        narIJHGK = ["narG"]
-        narIJHGK_color = ['#f1c40f']
-        narIJHGK_symbol = ["2"]
-        writeTemplateBinary(args.outdir, results, "narG", narIJHGK, narIJHGK_color, narIJHGK_symbol)
-        
-    # tox
-    if "TOXIN" in results.columns:
-        writeTemplateTOX(args.outdir, results, 'TOXIN')
-    
-    # ARM
-    list_familiesRes ={'AMINOGLYCOSIDE' : ['#a6cee3', '#1f78b4'],
-                            'MACROLIDE' : ['#b2df8a', '#33a02c'],
-                             'PHENICOL' : ['#fb9a99', '#e31a1c'],
-                          'SULFONAMIDE' : ['#fdbf6f', '#ff7f00'],
-                         'TETRACYCLINE' : ['#cab2d6', "#6a3d9a"],
-                         'TRIMETHOPRIM' : ['#ffff99', '#b15928'],
-                  'QUATERNARY AMMONIUM' : ["#e0eaf4", "#3c6498"],
-                          'BETA-LACTAM' : ["#da74da", "#9e3c8b"],
-                            'QUINOLONE' : ["#b0c665", "#6c7b38"],
-                            'RIFAMYCIN' : ["#bd924f", "#926114"]}
-
-
-    for family in list_familiesRes : 
-        if family in results.columns:
-            writeTemplateStrip (args.outdir, results, family, list_familiesRes)
-    
-    
-    #=============================================================================#
+    spuA(results, args)
+    narG(results, args)
+    toxin(results, args)
+    amr_families(results, args)
     
     results.to_csv(args.outdir+"/"+args.outdir.split("/")[-1]+".txt", sep='\t')
     
-    
-    
-    if args.tree and len(args.assemblies) >= 4 : 
-        print ("\nGenerating a phylogenetic tree from JolyTree \n")
-        os.makedirs(args.outdir+"/FolderJolyTree" )
-        os.system("cp "+ " ".join(args.assemblies) + " " + args.outdir+"/FolderJolyTree/")   
-        os.system('bash ' + args.path + '/script/JolyTree/JolyTree.sh -i '+ args.outdir+ "/FolderJolyTree -b "+ args.outdir+"/"+args.outdir + ".jolytree -t " + str(args.threads) + " > "
-                  + args.outdir+"/"+args.outdir + ".jolytree.log")
-        os.system("rm -R "+ args.outdir+"/FolderJolyTree/")
-   
-
-
+    if args.tree and len(args.assemblies) >= 4 :
+        generate_jolytree(args)
+  

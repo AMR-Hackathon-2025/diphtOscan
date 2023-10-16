@@ -13,7 +13,8 @@ not, see <http://www.gnu.org/licenses/>.
 """
 
 """
-Copyright 2022 Melanie Hennart (melanie.hennart@pasteur.fr)
+Copyright 2023 Melanie Hennart (melanie.hennart@pasteur.fr)
+Copyright 2023 Martin Rethoret Pasty (martin.rethoret-pasty@pasteur.fr)
 https://gitlab.pasteur.fr/BEBP
 
 This file is part of diphtOscan. diphtOscan is free software: you can redistribute it and/or modify
@@ -28,13 +29,13 @@ not, see <http://www.gnu.org/licenses/>.
 import os
 
 
-def get_species_results(contigs, folder, threads):
+def get_species_results(contigs:str, folder:str, threads:str) -> dict:
     species, species_hit_strength = get_corynebacterium_species(contigs, folder, threads)
     return {'species': species,
             'species_match': species_hit_strength}
 
 
-def get_corynebacterium_species(contigs, folder, threads):
+def get_corynebacterium_species(contigs:str, folder:str, threads:str) -> tuple:
     f = os.popen('mash dist '+folder+'/species_mash_sketches.msh -p '+ threads + ' ' + contigs)
 
     best_species = None
@@ -68,7 +69,7 @@ def get_corynebacterium_species(contigs, folder, threads):
         return 'unknown', ''
 
 
-def is_cd_complex(results):
+def is_cd_complex(results:dict) -> bool:
     """
     Returns True if the species call is in the Cd-complex, otherwise false.
     """
@@ -85,4 +86,3 @@ def is_cd_complex(results):
     if species.startswith('C. pseudotuberculosis'):
         return True
     return False
-

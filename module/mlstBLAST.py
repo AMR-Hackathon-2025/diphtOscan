@@ -24,14 +24,26 @@ import collections
 import os
 import re
 
-from .blastn import run_blastn
+from typing import List
+from .blastn import run_blastn, BlastHit
 from .truncation import truncation_check
 
 
-def mlst_blast(seqs, database, info_arg, assemblies, min_cov, min_ident, max_missing,
-               check_for_truncation=False, report_incomplete=False, allow_multiple=False,
-               min_gene_count=None, unknown_group_name=None,
-               min_spurious_cov=None, min_spurious_ident=None):
+def mlst_blast(seqs:str, 
+               database:str, 
+               info_arg:str, 
+               assemblies:list, 
+               min_cov:float, 
+               min_ident:float, 
+               max_missing:int,
+               check_for_truncation=False, 
+               report_incomplete=False, 
+               allow_multiple=False,
+               min_gene_count=None, 
+               unknown_group_name=None,
+               min_spurious_cov=None, 
+               min_spurious_ident=None
+               ) -> tuple:
     st_names, alleles_to_st, st_to_info, header = load_st_database(database, info_arg)
 
     # In order to call an ST, there needs to be an exact match for half (rounded down) of the
@@ -85,9 +97,17 @@ def mlst_blast(seqs, database, info_arg, assemblies, min_cov, min_ident, max_mis
     return final_call, final_alleles, final_info, spurious_hits
 
 
-def call_one_st(hits, header, check_for_truncation, max_missing, alleles_to_st,
-                required_exact_matches, info_arg, st_to_info, report_incomplete,
-                min_gene_count, unknown_group_name):
+def call_one_st(hits:List[BlastHit], 
+                header:List[str], 
+                check_for_truncation:bool, 
+                max_missing:int, 
+                alleles_to_st:dict,
+                required_exact_matches:int, 
+                info_arg:str, 
+                st_to_info:dict, 
+                report_incomplete:bool,
+                min_gene_count, 
+                unknown_group_name) -> tuple:
     best_alleles = get_best_allele_per_locus(hits, check_for_truncation)
 
     best_st = []
@@ -154,7 +174,7 @@ def call_one_st(hits, header, check_for_truncation, max_missing, alleles_to_st,
     return bst, best_st_annotated, info_final
 
 
-def get_allele_and_locus(hit):
+def get_allele_and_locus(hit:BlastHit) -> tuple:
     """
     Parses the allele name and locus name from the hit's gene ID.
     """
@@ -168,7 +188,7 @@ def get_allele_and_locus(hit):
     return allele, locus
 
 
-def keep_only_one_hit_per_locus(hits):
+def keep_only_one_hit_per_locus(hits:List[BlastHit]) -> List[BlastHit]:
     hits_per_locus = collections.defaultdict(list)
     for hit in hits:
         _, locus = get_allele_and_locus(hit)
@@ -181,7 +201,7 @@ def keep_only_one_hit_per_locus(hits):
     return kept_hits
 
 
-def get_best_allele_per_locus(hits, check_for_truncation):
+def get_best_allele_per_locus(hits:List[BlastHit], check_for_truncation:bool) -> dict:
     best_scores = {}   # key = locus, value = BLAST score for best allele encountered so far
     best_alleles = {}  # key = locus, value = best allele (* if imprecise match)
 
@@ -199,11 +219,10 @@ def get_best_allele_per_locus(hits, check_for_truncation):
         else:  # initialise
             best_scores[locus] = hit.score
             best_alleles[locus] = allele.split('_')[1]  # store number only
-
     return best_alleles
 
 
-def process_spurious_hits(hits):
+def process_spurious_hits(hits:List[BlastHit]) -> list:
     hit_strings = []
     for hit in hits:
         allele, locus = get_allele_and_locus(hit)
@@ -214,7 +233,7 @@ def process_spurious_hits(hits):
     return hit_strings
 
 
-def load_st_database(database, info_arg):
+def load_st_database(database:str, info_arg:str) -> tuple:
     st_names = []
     alleles_to_st = {}  # key = concatenated string of alleles, value = st
     st_to_info = {}  # key = st, value = info relating to this ST, eg clonal group
@@ -240,7 +259,7 @@ def load_st_database(database, info_arg):
     return st_names, alleles_to_st, st_to_info, header
 
 
-def get_closest_locus_variant(query, annotated_query, sts):
+def get_closest_locus_variant(query:List[str], annotated_query:List[str], sts:dict) -> tuple:
     annotated_query = list(annotated_query)  # copy the list so we don't change the original
     closest = []
     closest_alleles = {}   # key = st, value = list
@@ -276,7 +295,7 @@ def get_closest_locus_variant(query, annotated_query, sts):
     return closest_st, min_dist, min_dist_incl_snps
 
 
-def add_to_string(existing_str, new_str):
+def add_to_string(existing_str:str, new_str:str) -> str:
     if existing_str == '':
         return new_str
     elif new_str == '':
@@ -285,13 +304,13 @@ def add_to_string(existing_str, new_str):
         return existing_str + ',' + new_str
 
 
-def add_to_strings(existing_strs, new_strs):
+def add_to_strings(existing_strs:str, new_strs:str) -> List[str]:
     assert len(existing_strs) == len(new_strs)
     return [add_to_string(existing_str, new_str)
             for existing_str, new_str in zip(existing_strs, new_strs)]
 
 
-def cluster_hits_by_contig(hits):
+def cluster_hits_by_contig(hits:List[BlastHit]):
     hits_by_contig = collections.defaultdict(list)
     for h in hits:
         hits_by_contig[h.contig_name].append(h)
