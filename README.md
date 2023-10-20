@@ -20,6 +20,7 @@ _diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphther
 * [mash](http://mash.readthedocs.io/en/latest/) version >= 2.3; 
 * [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.13.0
 * [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.11.2
+* [hmmer](http://hmmer.org/)
 
 Note: 
 Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GIPhy/JolyTree)
@@ -50,7 +51,7 @@ python __main__.py [options]
 Launch _diphtOscan_ without option to read the following documentation:
 
 ```
-usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-t] [-res_vir] [-plus] [-integron] [-o OUTDIR]
+usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-st] [-t] [-res_vir] [-plus] [-integron] [-o OUTDIR]
                    [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] [-h]
                    [--version]
 
@@ -97,13 +98,13 @@ Help:
 
 ## Example
 
-In order to illustrate the usefulness of _diphtOscan_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Corynebacterium diphtheriae_ genomes derived from the analysis of xxx.
+In order to illustrate the usefulness of _diphtOscan_ and to describe its output files, the following use case example describes its usage for inferring a phylogenetic tree of _Corynebacterium diphtheriae_ genomes derived from the analysis of [Hennart et al](https://peercommunityjournal.org/articles/10.24072/pcjournal.307/).
 
 ##### Running _diphtOscan_
 
 The following command line allows the script `diphtOscan` to be launched with default options on 8 threads:
 ```bash
-python3 __main__.py -a $genomes --taxonomy --resistance_virulence --threads 8 -o Cdiphteriae
+python3 __main__.py -a $genomes --mlst --resistance_virulence --threads 8 -o Cdiphteriae
 ```
 
 As the basename was set to 'Cdiphteriae', _diphtOscan_ writes in few minutes the four following output files:
