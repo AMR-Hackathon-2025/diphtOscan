@@ -52,8 +52,8 @@ Launch _diphtOscan_ without option to read the following documentation:
 
 ```
 usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-st] [-t] [-res_vir] [-plus] [-integron] [-o OUTDIR]
-                   [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] [-h]
-                   [--version]
+                   [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] 
+                   [--overwrite] [-h] [--version]
 
 diphtOscan: a tool for characterising virulence and resistance in Corynebacterium
 
@@ -87,6 +87,7 @@ Settings:
   --min_coverage MIN_COVERAGE
                         Minimum alignment coverage for main results (default: 50)
   --threads THREADS     The number of threads to use for processing. (default: 4)
+  --overwrite           Allows the output directory to be overwritten if it already exists
 
 Phylogenetic tree:
   -tree, --tree         Generates a phylogenetic tree from JolyTree
