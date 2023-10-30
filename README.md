@@ -24,7 +24,7 @@ _diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphther
 
 Note: 
 Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GIPhy/JolyTree)
-* [Jolytree](https://gitlab.pasteur.fr/GIPhy/JolyTree) version >= 2.1
+* [Jolytree](https://gitlab.pasteur.fr/GIPhy/JolyTree) version >= 2.1 (The JollyTree repository should be cloned into diphtoscan/script/)
 
 Need for the `--integron` i.e. using the Integron Finder version 2 tool (https://github.com/gem-pasteur/Integron_Finder)
 
