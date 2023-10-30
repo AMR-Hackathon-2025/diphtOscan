@@ -102,6 +102,7 @@ import datetime
 import os.path
 import argparse
 import subprocess
+import shutil
 
 sys.path.append('/module')
 
@@ -218,10 +219,12 @@ def parse_arguments():
     setting_args.add_argument('--threads', type=int, default=4,
                               help='The number of threads to use for processing. (default: 4)')
     
+    setting_args.add_argument('--overwrite', action='store_true',
+                              help='Allows the output directory to be overwritten if it already exists')
+    
     tree_args = parser.add_argument_group('Phylogenetic tree')
     tree_args.add_argument('-tree', '--tree', action='store_true',
                            help='Generates a phylogenetic tree from JolyTree')
-    
     
     help_args = parser.add_argument_group('Help')
     help_args.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS,
@@ -259,6 +262,9 @@ if __name__ == "__main__":
     resistance_db = find_resistance_db(args) 
     prediction_db = args.path +"/data/virulence"
     
+    if args.overwrite and os.path.exists(args.outdir):
+        shutil.rmtree(args.outdir)
+        print(f"Directory {args.outdir} deleted successfully \n")
     try:
         os.makedirs(args.outdir)
         print("Directory '%s' created successfully \n" %args.outdir)
