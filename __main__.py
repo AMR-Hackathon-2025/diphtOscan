@@ -219,7 +219,7 @@ def parse_arguments():
     setting_args.add_argument('--threads', type=int, default=4,
                               help='The number of threads to use for processing. (default: 4)')
     
-    setting_args.add_argument('--overwrite', action='store_true', default=False,
+    setting_args.add_argument('--overwrite', action='store_true',
                               help='Allows the output directory to be overwritten if it already exists')
     
     tree_args = parser.add_argument_group('Phylogenetic tree')
