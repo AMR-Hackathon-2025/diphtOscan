@@ -85,4 +85,6 @@ def is_cd_complex(results:dict) -> bool:
         return True
     if species.startswith('C. pseudotuberculosis'):
         return True
+    if species.startswith('C. ramonii'):
+        return True
     return False
