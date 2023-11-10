@@ -121,7 +121,8 @@ from module.utils import (
     is_non_zero_file,
     armfinder_to_table,
     get_genomic_context,
-    find_resistance_db )
+    find_resistance_db
+    )
 
 def test_unique_dependency(name:str):
     return subprocess.call(["command", "-v", name])
@@ -165,6 +166,63 @@ def test_required_dependency(args):
             args.tree = False
     print('\n')
     return args
+
+
+def redefine_output_file(args):
+
+    if not os.path.exists(args.outdir):
+        print(f"Directory {args.outdir} does not exist.")
+        sys.exit(1)   
+    final_output_path = args.outdir  
+    args.outdir = f"{args.outdir}_temp_folder"
+    return args, final_output_path
+
+
+def rename_temp_folder_file(directory):
+    expected_filename = f"{directory}.txt"
+    file_path = os.path.join(directory, expected_filename)
+
+    if os.path.exists(file_path):
+        new_filename = expected_filename.replace("_temp_folder.txt", ".txt")
+        new_file_path = os.path.join(args.outdir, new_filename)
+        
+        try:
+            os.rename(file_path, new_file_path)
+        except Exception as e:
+            print(f"Error renaming file : {e}")
+    else:
+        print(f"The {file_path} file does not exist.")
+
+
+def move_file_to_outdir_folder(temporary_folder, outdir_folder):
+    
+    for fichier in os.listdir(outdir_folder):
+        chemin_fichier = os.path.join(outdir_folder, fichier)
+        try:
+            if os.path.isfile(chemin_fichier):
+                os.unlink(chemin_fichier)
+            elif os.path.isdir(chemin_fichier):
+                shutil.rmtree(chemin_fichier)
+        except Exception as e:
+            print(f"Error when deleting {chemin_fichier}: {e}")
+
+    rename_temp_folder_file(temporary_folder)
+
+    for fichier in os.listdir(temporary_folder):
+        source_path = os.path.join(temporary_folder, fichier)
+        destination_path = os.path.join(outdir_folder, fichier)
+        try:
+            if os.path.isfile(source_path):
+                shutil.move(source_path, destination_path)
+            elif os.path.isdir(source_path):
+                shutil.move(source_path, destination_path)
+        except Exception as e:
+            print(f"Error when transferring {source_path} to {destination_path}:: {e}")
+
+    try:
+        shutil.rmtree(temporary_folder)
+    except Exception as e:
+        print(f"Error when deleting the temporary folder {temporary_folder}: {e}")
 
 
 def parse_arguments():
@@ -262,9 +320,9 @@ if __name__ == "__main__":
     resistance_db = find_resistance_db(args) 
     prediction_db = args.path +"/data/virulence"
     
-    if args.overwrite and os.path.exists(args.outdir):
-        shutil.rmtree(args.outdir)
-        print(f"Directory {args.outdir} deleted successfully \n")
+    if args.overwrite :
+        args, final_output_path = redefine_output_file(args)
+
     try:
         os.makedirs(args.outdir)
         print("Directory '%s' created successfully \n" %args.outdir)
@@ -349,3 +407,7 @@ if __name__ == "__main__":
     if args.tree and len(args.assemblies) >= 4 :
         generate_jolytree(args)
   
+    if args.overwrite :
+        move_file_to_outdir_folder(temporary_folder = args.outdir,
+                                   outdir_folder = final_output_path
+                                   )
