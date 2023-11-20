@@ -172,14 +172,20 @@ def redefine_output_file(args):
 
     if not os.path.exists(args.outdir):
         print(f"Directory {args.outdir} does not exist.")
-        sys.exit(1)   
+        try:
+            os.makedirs(args.outdir)
+            print("Directory '%s' created successfully \n" %args.outdir)
+        except OSError :
+            print("Directory '%s' can not be created \n"  %args.outdir)        
+            sys.exit(0) 
     final_output_path = args.outdir  
     args.outdir = f"{args.outdir}_temp_folder"
     return args, final_output_path
 
 
 def rename_temp_folder_file(directory):
-    expected_filename = f"{directory}.txt"
+    path, file_name = os.path.split(directory)
+    expected_filename = f"{file_name}.txt"
     file_path = os.path.join(directory, expected_filename)
 
     if os.path.exists(file_path):
