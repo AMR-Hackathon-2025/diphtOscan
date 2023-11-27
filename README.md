@@ -4,7 +4,7 @@ _diphtOscan_ is a command line script written in [Python](https://www.python.org
 For more details, see the associated publication (https://www.biorxiv.org/content/10.1101/2023.02.20.529124v1xxx).
 
 _diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphtheriae_ and other species of the _Corynebacterium diphtheriae_ species complex (CdSC) for:
-* Species (e.g. _C. diphtheriae_, _C. ulcerans_, _C. pseudotuberculosis_, _C. belfantii_, _C. rouxii_ and _C. silvaticum_)
+* Species (e.g. _C. diphtheriae_, _C. ulcerans_, _C. pseudotuberculosis_, _C. belfantii_, _C. rouxii_ , _C. ramonii_ and _C. silvaticum_)
 * Biovar-associated genes (_spuA_, nitrate reductase gene cluster)
 * MLST sequence type
 * Virulence factors, including _tox_ gene detection and disruption prediction
