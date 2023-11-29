@@ -132,7 +132,7 @@ def test_multiple_dependencies(dependencies:List[str]):
     for dependency in dependencies:
         rc = test_unique_dependency(dependency)
         if rc == 1:
-            print(f'/!\ Warning /!\ : {dependency} missing in path!')
+            print(f'/!\\ Warning /!\\ : {dependency} missing in path!')
             sys.exit(-1)
 
 
