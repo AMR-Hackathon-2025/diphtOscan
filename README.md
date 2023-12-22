@@ -38,7 +38,7 @@ git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
 
 **C.** Give the execute permission to the file `diphtOscan/__main__.py`:
 ```bash
-chmod diphtOscan/+x __main__.py
+chmod +x diphtOscan/__main__.py
 ```
 
 **D.** Execute _diphtOscan_ with the following command line model:
