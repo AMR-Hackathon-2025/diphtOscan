@@ -36,9 +36,9 @@ Need for the `--integron` i.e. using the Integron Finder version 2 tool (https:/
 git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
 ```
 
-**C.** Give the execute permission to the file `diphtOscan/__main__.py`:
+**C.** Give the execute permission to the file `diphtoscan/__main__.py`:
 ```bash
-chmod +x diphtOscan/__main__.py
+chmod +x diphtoscan/__main__.py
 ```
 
 **D.** Execute _diphtOscan_ with the following command line model:
