@@ -41,7 +41,12 @@ git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
 chmod +x diphtoscan/__main__.py
 ```
 
-**D.** Execute _diphtOscan_ with the following command line model:
+**D.** Run the installation of the JollyTree module (if you plan to use it) :
+```bash
+diphtoscan/script/update_tools.sh
+```
+
+**E.** Execute _diphtOscan_ with the following command line model:
 ```bash
 python __main__.py [options]
 ```
