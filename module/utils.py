@@ -91,29 +91,75 @@ def get_tox_results(infoTOX:tuple, contigs:str, args) -> dict:
     #results.update(dict(zip(infoTOX[0], chr_st_detail)))
     return results
 
+def is_contig_edge(data_resistance:pd.DataFrame, file:str) -> bool:
 
-def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
+    len_seq_ref = int(data_resistance['Reference sequence length'])*3
+    pos_start = int(data_resistance['Start'])
+    pos_stop = int(data_resistance['Stop'])
+    len_seq_found = pos_stop - (pos_start-1)
+
+    if len_seq_found < len_seq_ref :
+        missing_nucleotides = len_seq_ref - len_seq_found
+        over_start = (pos_start-missing_nucleotides) < 0
+        over_stop = (find_len_contig(file, data_resistance['Contig id']) - (pos_stop + missing_nucleotides)) < 0
+        
+        if over_start or over_stop : 
+            return True
+        
+    return False
+                
+
+def find_len_contig(file:str, contig :str):
+    """Finds and returns the length of a specific contig in a FASTA file.
+
+    :param file: Path to the FASTA file.
+    :param contig: Contig number.
+    :return: Length of the specified contig or None if not found.
+    """
+    with open(file, 'r') as fichier:
+        line = fichier.readline()
+        while line:
+            if line.startswith('>' + contig):
+                length = 0
+                line = fichier.readline()
+                while line and not line.startswith('>'):
+                    length += len(line.strip())
+                    line = fichier.readline()
+                return length
+            else:
+                line = fichier.readline()
+    return None
+
+
+def armfinder_to_table(data_resistance:pd.DataFrame, fasta:str) ->  pd.DataFrame:
     dico_Method = {'ALLELEX' : "",
                    'EXACTX' :  "",
                    'POINTX' : "!",
                    'BLASTX' : "*",
                    'PARTIALX' : "?",
-                   'PARTIAL_CONTIG_ENDX' : "?$",
+                   'PARTIAL_CONTIG_ENDX' : "?$", #The PARTIAL_CONTIG_ENDX method is only attributedd when the start or end position of the sequence being searched coincides exactly with the start or end of the contig.
                    'INTERNAL_STOP' :  "#"}
     data_resistance['Class'] = data_resistance['Class'].fillna ('NoClass')
     Class = data_resistance['Class'].value_counts().keys()
     Strains = data_resistance['Name'].value_counts().keys()
     table = pd.DataFrame('',index=Strains, columns=Class)
-    for res in data_resistance.index : 
+
+    for res in data_resistance.index :
         gene = data_resistance['Gene symbol'][res] + dico_Method[data_resistance['Method'][res]]      
-        if 'tox' in data_resistance['Gene symbol'][res] :    
-            if float(data_resistance['% Coverage of reference sequence'][res]) != 100.00 : 
-                if (data_resistance['Method'][res] == 'BLASTX') :
-                    gene = data_resistance['Gene symbol'][res] + "-NTTB?-"+str(round(100-float(data_resistance['% Coverage of reference sequence'][res])))+"%"              
-                else :
-                    gene = data_resistance['Gene symbol'][res] + "-NTTB" + dico_Method[data_resistance['Method'][res]]             
+        
+        if 'tox' in data_resistance['Gene symbol'][res] : 
+            if float(data_resistance['% Coverage of reference sequence'][res]) != 100.00 :
+                    if (data_resistance['Method'][res] == 'BLASTX') :
+                        gene = data_resistance['Gene symbol'][res] + "-NTTB?-"+str(round(100-float(data_resistance['% Coverage of reference sequence'][res])))+"%"              
+                    else :
+                        gene = data_resistance['Gene symbol'][res] + "-NTTB" + dico_Method[data_resistance['Method'][res]]
+
+        if is_contig_edge(data_resistance.iloc[res], fasta) : # Used to find certain cases of interruption due to a contig end that AMRfinder is unable to find. 
+            gene = f"{data_resistance['Gene symbol'][res]}_end_of_contig"
+            
         if (data_resistance['Method'][res] == 'PARTIALX') or \
            (data_resistance['Method'][res] == 'PARTIAL_CONTIG_ENDX') or \
+           ("end_of_contig" in gene) or \
            (data_resistance['Method'][res] == 'INTERNAL_STOP') : 
                gene += "-"+str(round(100-float(data_resistance['% Coverage of reference sequence'][res])))+"%"
         
