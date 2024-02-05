@@ -338,10 +338,11 @@ if __name__ == "__main__":
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
+
         basename = os.path.basename(genome)
         strain = os.path.splitext(basename)[0]
-        
-        fasta =  get_path +'/'+genome
+
+        fasta =  f"{get_path}/{genome}"
         dict_genome =  get_species_results(fasta, args.path + '/data/species', str(args.threads))   
     
         if args.mlst : 
@@ -366,6 +367,7 @@ if __name__ == "__main__":
                       ' --translation_table 11 --plus --quiet ')
             if is_non_zero_file(args.outdir +'/' +strain + ".prot.fa"):
                 data = pd.read_csv(args.outdir +'/' + strain + ".blast.out",sep="\t", dtype='str')
+                data['File'] = genome
                 data_resistance = pd.concat([data_resistance, data], axis = 0, ignore_index=True)
                 dict_genome.update({"GENOMIC_CONTEXT" : get_genomic_context (args.outdir, data)})
             else :
@@ -387,7 +389,7 @@ if __name__ == "__main__":
     table_results = table_results.T
     
     if len(data_resistance.index) != 0 :
-        table_resistance = armfinder_to_table(data_resistance, fasta)
+        table_resistance = armfinder_to_table(data_resistance)
         for family in table_resistance.columns:
             table_resistance[family] = table_resistance[family].apply(lambda x : ";".join(sorted(x.split(';'))))
 
