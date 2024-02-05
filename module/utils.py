@@ -91,7 +91,7 @@ def get_tox_results(infoTOX:tuple, contigs:str, args) -> dict:
     #results.update(dict(zip(infoTOX[0], chr_st_detail)))
     return results
 
-def is_contig_edge(data_resistance:pd.DataFrame, file:str) -> bool:
+def is_contig_edge(data_resistance:pd.DataFrame) -> bool:
 
     len_seq_ref = int(data_resistance['Reference sequence length'])*3
     pos_start = int(data_resistance['Start'])
@@ -101,7 +101,7 @@ def is_contig_edge(data_resistance:pd.DataFrame, file:str) -> bool:
     if len_seq_found < len_seq_ref :
         missing_nucleotides = len_seq_ref - len_seq_found
         over_start = (pos_start-missing_nucleotides) < 0
-        over_stop = (find_len_contig(file, data_resistance['Contig id']) - (pos_stop + missing_nucleotides)) < 0
+        over_stop = (find_len_contig(data_resistance['File'], data_resistance['Contig id']) - (pos_stop + missing_nucleotides)) < 0
         
         if over_start or over_stop : 
             return True
@@ -128,10 +128,10 @@ def find_len_contig(file:str, contig :str):
                 return length
             else:
                 line = fichier.readline()
-    return None
+    return None #TODO to change  
 
 
-def armfinder_to_table(data_resistance:pd.DataFrame, fasta:str) ->  pd.DataFrame:
+def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
     dico_Method = {'ALLELEX' : "",
                    'EXACTX' :  "",
                    'POINTX' : "!",
@@ -154,7 +154,7 @@ def armfinder_to_table(data_resistance:pd.DataFrame, fasta:str) ->  pd.DataFrame
                     else :
                         gene = data_resistance['Gene symbol'][res] + "-NTTB" + dico_Method[data_resistance['Method'][res]]
 
-        if is_contig_edge(data_resistance.iloc[res], fasta) : # Used to find certain cases of interruption due to a contig end that AMRfinder is unable to find. 
+        if is_contig_edge(data_resistance.iloc[res]) : # Used to find certain cases of interruption due to a contig end that AMRfinder is unable to find. 
             gene = f"{data_resistance['Gene symbol'][res]}_end_of_contig"
             
         if (data_resistance['Method'][res] == 'PARTIALX') or \
