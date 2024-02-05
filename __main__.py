@@ -324,7 +324,6 @@ if __name__ == "__main__":
         sys.exit(0)
 
     resistance_db = find_resistance_db(args) 
-    prediction_db = args.path +"/data/virulence"
     
     if args.overwrite :
         args, final_output_path = redefine_output_file(args)
@@ -335,7 +334,7 @@ if __name__ == "__main__":
     except OSError :
         print("Directory '%s' can not be created \n"  %args.outdir)        
         sys.exit(0)
-
+	
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
@@ -344,7 +343,7 @@ if __name__ == "__main__":
         
         fasta =  get_path +'/'+genome
         dict_genome =  get_species_results(fasta, args.path + '/data/species', str(args.threads))   
-        
+    
         if args.mlst : 
             cd_complex = is_cd_complex(dict_genome)
             dict_genome.update(get_chromosome_mlst_results(MLST_db, fasta, cd_complex, args))
@@ -387,8 +386,8 @@ if __name__ == "__main__":
     table_results = pd.DataFrame(dict_results)
     table_results = table_results.T
     
-    if len(data_resistance.index) != 0 :     
-        table_resistance = armfinder_to_table(data_resistance)
+    if len(data_resistance.index) != 0 :
+        table_resistance = armfinder_to_table(data_resistance, fasta)
         for family in table_resistance.columns:
             table_resistance[family] = table_resistance[family].apply(lambda x : ";".join(sorted(x.split(';'))))
 
