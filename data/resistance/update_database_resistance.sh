@@ -3,7 +3,7 @@
 PATH_DB=$(dirname "$0")
 DATE=$(date "+%Y-%m-%d")
 ## Update Antimicrobial_resistance/AMRFinderPlus
-wget --quiet --recursive --no-host-directories --cut-dirs=6 ftp://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/latest/ -P $PATH_DB/$DATE 
+wget --quiet --recursive --no-host-directories --cut-dirs=6 https://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/latest/ -P $PATH_DB/$DATE 
 
 version_DB=$(cat $PATH_DB/$DATE/version.txt)
 echo "Looking up databases at https://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/"
