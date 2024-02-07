@@ -342,19 +342,17 @@ if __name__ == "__main__":
         basename = os.path.basename(genome)
         strain = os.path.splitext(basename)[0]
 
-        fasta =  f"{get_path}/{genome}"
-        dict_genome =  get_species_results(fasta, args.path + '/data/species', str(args.threads))   
-    
+        dict_genome =  get_species_results(genome, args.path + '/data/species', str(args.threads)) 
         if args.mlst : 
             cd_complex = is_cd_complex(dict_genome)
-            dict_genome.update(get_chromosome_mlst_results(MLST_db, fasta, cd_complex, args))
+            dict_genome.update(get_chromosome_mlst_results(MLST_db, genome, cd_complex, args))
         
         if args.tox :
-            dict_genome.update(get_tox_results(TOX_db, fasta, args))
+            dict_genome.update(get_tox_results(TOX_db, genome, args))
             
         if args.resistance_virulence :   
             min_identity = "-1" # Defaut amrfinder
-            os.system('amrfinder --nucleotide ' + fasta +
+            os.system('amrfinder --nucleotide ' + genome +
                       ' --name '+strain+
                       ' --nucleotide_output ' + args.outdir + "/" + strain + ".prot.fa" +
                       ' --output '+ args.outdir + "/" + strain + ".blast.out" +
@@ -377,7 +375,7 @@ if __name__ == "__main__":
         if args.integron :
           os.system('integron_finder --cpu ' + str(args.threads)+
                     ' --outdir '+ args.outdir + "/" +
-                    ' --gbk --func-annot --mute '+ fasta)   
+                    ' --gbk --func-annot --mute '+ genome)   
           os.system('find '+ args.outdir + "/Results_Integron_Finder_*/ " + '-empty -type d -delete')
 
           files = pd.read_csv(args.outdir + "/Results_Integron_Finder_"+strain + "/" + strain+".summary",sep="\t", index_col=0, skiprows = 1)
