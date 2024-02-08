@@ -19,4 +19,3 @@ def update_database(arguments, mlst_database:tuple, tox_database:tuple):
         
         os.system('bash ' + arguments.path + '/data/resistance/update_database_resistance.sh')
         print("   ... done \n\n\n")
-        
