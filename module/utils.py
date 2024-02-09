@@ -169,7 +169,6 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
                 missing_coverage = round(100-float(data_resistance['% Coverage of reference sequence'][res]),1)
                 if (100 - missing_coverage) < 100 :
                     gene = f"{gene}-{missing_coverage}%" 
-                print(gene)
         strain = data_resistance['Name'][res]
         family = data_resistance['Class'][res]
         
