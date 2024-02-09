@@ -53,9 +53,9 @@ Usage:
 
 __authors__ = ("Melanie HENNART; Martin RETHORET-PASTY")
 __contact__ = ("melanie.hennart@pasteur.fr; martin.rethoret-pasty@pasteur.fr")
-__version__ = "1.3.0"
+__version__ = "1.4.0" 
 __copyright__ = "copyleft"
-__date__ = "2023/10/12"
+__date__ = "2024/20/09"
 
 ###############################################################################
 #                                                                             #
