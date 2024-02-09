@@ -17,9 +17,9 @@ _diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphther
 
 **A.** Install the following programs and tools, or verify that they are already installed with the required version:
 * [python](https://www.python.org/) version >= 3.8.3
-* [mash](http://mash.readthedocs.io/en/latest/) version >= 2.3; 
+* [mash](http://mash.readthedocs.io/en/latest/) version >= 2.3 
 * [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.13.0
-* [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.11.2
+* [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.12.8
 * [hmmer](http://hmmer.org/)
 
 Note: 
