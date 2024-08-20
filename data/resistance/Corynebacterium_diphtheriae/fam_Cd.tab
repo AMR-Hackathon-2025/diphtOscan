@@ -11,13 +11,10 @@ narJ	MOLECULAR_NITRATE	narJ	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOV
 narH	MOLECULAR_NITRATE	narH	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narIJHK	narIJHK	Corynebacterium diphtheriae nitrate reductase subunit beta narH
 narG	MOLECULAR_NITRATE	narG	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narG	narG	Corynebacterium diphtheriae nitrate reductase subunit alpha narG
 narK	MOLECULAR_NITRATE	narK	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narIJHK	narIJHK	Corynebacterium diphtheriae MFS transporter narK
-pbp2m	AMR	pbp2m	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	AMR	AMR	BETA-LACTAM	PENICILLIN	Corynebacterium diphtheriae beta-lactam resistant_PBP2M
 VIRULENCE_Corynebacterium	VIRULENCE	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	VIRULENCE	VIRULENCE			
-tox	VIRULENCE_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	VIRULENCE	VIRULENCE			
 tox_pseudotuberculosis	tox	tox_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium pseudotuberculosis diphtheria toxin precursor tox
 tox_ulcerans	tox	tox_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium ulcerans diphtheria toxin precursor tox
 tox_diphtheriae	tox	tox_diphtheriae	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium diphtheriae diphtheria toxin precursor tox
-pld	VIRULENCE_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	VIRULENCE	VIRULENCE			
 pld_pseudotuberculosis	pld	pld_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium pseudotuberculosis Phospholipase D
 pld_ulcerans	pld	pld_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium ulcerans Phospholipase D
 rbp	VIRULENCE_Corynebacterium	rbp	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Putative ribosome binding protein
@@ -39,25 +36,10 @@ DIP2014	ADHESIN_Corynebacterium	DIP2014	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.0
 RhuM	ADHESIN_Corynebacterium	RhuM	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	RhuM-like protein
 cpp	ADHESIN_Corynebacterium	cpp	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Endoglycosidase of the EndoE family
 DIP2093	ADHESIN_Corynebacterium	DIP2093	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Csh family fibrillar adhesin-related protein
-cbpA	ADHESIN_Corynebacterium	cbpA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Cna B-type domain-containing protein
 DIP0543	ADHESIN_Corynebacterium	DIP0543	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Putative exo-sialidase NanH
 SpaA-type_pili	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
-spaA	SpaA-type_pili	spaA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaA-type_pili_diphtheriae	SpaA-type_pili_diphtheriae	SpaA-type pili major subunit SpaA
-srtA	SpaA-type_pili	srtA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaA-type_pili_diphtheriae	SpaA-type_pili_diphtheriae	Fimbrial associated sortase srtA
-spaB	SpaA-type_pili	spaB	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaA-type_pili_diphtheriae	SpaA-type_pili_diphtheriae	SpaA-type pili minor subunit SpaB
-spaC	SpaA-type_pili	spaC	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaA-type_pili_diphtheriae	SpaA-type_pili_diphtheriae	SpaA-type pili minor subunit SpaC
 SpaD-type_pili	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
-srtB	SpaD-type_pili	srtB	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaD-type_pili_diphtheriae	SpaD-type_pili_diphtheriae	Fimbrial associated sortase srtB
-spaD	SpaD-type_pili	spaD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaD-type_pili_diphtheriae	SpaD-type_pili_diphtheriae	SpaD-type pili minor subunit SpaD
-srtC	SpaD-type_pili	srtC	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaD-type_pili_diphtheriae	SpaD-type_pili_diphtheriae	Fimbrial associated sortase srtC
-spaE	SpaD-type_pili	spaE	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaD-type_pili_diphtheriae	SpaD-type_pili_diphtheriae	SpaD-type pili minor subunit SpaE
-spaF	SpaD-type_pili	spaF	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaD-type_pili_diphtheriae	SpaD-type_pili_diphtheriae	SpaD-type pili minor subunit SpaF
 SpaH-type_pili	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
-spaI	SpaH-type_pili	spaI	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaH-type_pili_diphtheriae	SpaH-type_pili_diphtheriae	SpaH-type pili minorsubunit SpaI
-srtE	SpaH-type_pili	srtE	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaH-type_pili_diphtheriae	SpaH-type_pili_diphtheriae	Fimbrial associated sortase srtE
-srtD	SpaH-type_pili	srtD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaH-type_pili_diphtheriae	SpaH-type_pili_diphtheriae	Fimbrial associated sortase srtD
-spaH	SpaH-type_pili	spaH	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaH-type_pili_diphtheriae	SpaH-type_pili_diphtheriae	SpaH-type pili minor subunit SpaH
-spaG	SpaH-type_pili	spaG	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SpaH-type_pili_diphtheriae	SpaH-type_pili_diphtheriae	SpaH-type pili minor subunit SpaG
 Surface-anchored pilus proteins	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
 sapA	Surface-anchored pilus proteins	sapA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SapADE_diphtheriae	SapADE_diphtheriae	Surface-anchored pilus proteins sapA
 sapD	Surface-anchored pilus proteins	sapD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SapADE_diphtheriae	SapADE_diphtheriae	Surface-anchored pilus proteins sapD
