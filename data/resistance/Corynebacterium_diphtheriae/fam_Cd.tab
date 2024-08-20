@@ -36,7 +36,6 @@ DIP2014	ADHESIN_Corynebacterium	DIP2014	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.0
 RhuM	ADHESIN_Corynebacterium	RhuM	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	RhuM-like protein
 cpp	ADHESIN_Corynebacterium	cpp	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Endoglycosidase of the EndoE family
 DIP2093	ADHESIN_Corynebacterium	DIP2093	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Csh family fibrillar adhesin-related protein
-DIP0543	ADHESIN_Corynebacterium	DIP0543	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Putative exo-sialidase NanH		
 Surface-anchored pilus proteins	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
 sapA	Surface-anchored pilus proteins	sapA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SapADE_diphtheriae	SapADE_diphtheriae	Surface-anchored pilus proteins sapA
 sapD	Surface-anchored pilus proteins	sapD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SapADE_diphtheriae	SapADE_diphtheriae	Surface-anchored pilus proteins sapD
