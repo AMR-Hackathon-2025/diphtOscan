@@ -125,13 +125,13 @@ from module.utils import (
     )
 
 def test_unique_dependency(name:str):
-    return subprocess.call(["command", "-v", name])
+    return shutil.which(name) is not None
 
 
 def test_multiple_dependencies(dependencies:List[str]):
     for dependency in dependencies:
-        rc = test_unique_dependency(dependency)
-        if rc == 1:
+        presence = test_unique_dependency(dependency)
+        if presence is not True:
             print(f'/!\\ Warning /!\\ : {dependency} missing in path!')
             sys.exit(-1)
 
