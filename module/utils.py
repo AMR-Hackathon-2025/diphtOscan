@@ -173,8 +173,8 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
         family = data_resistance['Class'][res]
         
         if table[family][strain] != '' :
-               table[family][strain] += ";"
-        table[family][strain] += gene
+               table.loc[strain, family] += ";"
+        table.loc[strain, family] += gene
     return table
 
 
