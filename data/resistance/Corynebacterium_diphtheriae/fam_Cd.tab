@@ -14,7 +14,6 @@ narK	MOLECULAR_NITRATE	narK	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOV
 VIRULENCE_Corynebacterium	VIRULENCE	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	VIRULENCE	VIRULENCE			
 tox_pseudotuberculosis	VIRULENCE_Corynebacterium	tox_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium pseudotuberculosis diphtheria toxin precursor tox
 tox_ulcerans	VIRULENCE_Corynebacterium	tox_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium ulcerans diphtheria toxin precursor tox
-tox_diphtheriae	VIRULENCE_Corynebacterium	tox_diphtheriae	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium diphtheriae diphtheria toxin precursor tox
 pld_pseudotuberculosis	VIRULENCE_Corynebacterium	pld_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium pseudotuberculosis Phospholipase D
 pld_ulcerans	VIRULENCE_Corynebacterium	pld_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium ulcerans Phospholipase D
 rbp	VIRULENCE_Corynebacterium	rbp	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Putative ribosome binding protein
