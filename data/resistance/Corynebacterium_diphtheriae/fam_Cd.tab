@@ -11,7 +11,6 @@ narJ	MOLECULAR_NITRATE	narJ	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOV
 narH	MOLECULAR_NITRATE	narH	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narIJHK	narIJHK	Corynebacterium diphtheriae nitrate reductase subunit beta narH
 narG	MOLECULAR_NITRATE	narG	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narG	narG	Corynebacterium diphtheriae nitrate reductase subunit alpha narG
 narK	MOLECULAR_NITRATE	narK	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narIJHK	narIJHK	Corynebacterium diphtheriae MFS transporter narK
-VIRULENCE_Corynebacterium	VIRULENCE	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	VIRULENCE	VIRULENCE			
 tox_pseudotuberculosis	tox	tox_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium pseudotuberculosis diphtheria toxin precursor tox
 tox_ulcerans	tox	tox_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium ulcerans diphtheria toxin precursor tox
 tox_diphtheriae	tox	tox_diphtheriae	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium diphtheriae diphtheria toxin precursor tox
@@ -36,10 +35,7 @@ DIP2014	ADHESIN_Corynebacterium	DIP2014	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.0
 RhuM	ADHESIN_Corynebacterium	RhuM	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	RhuM-like protein
 cpp	ADHESIN_Corynebacterium	cpp	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Endoglycosidase of the EndoE family
 DIP2093	ADHESIN_Corynebacterium	DIP2093	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	2	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Csh family fibrillar adhesin-related protein
-DIP0543	ADHESIN_Corynebacterium	DIP0543	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Putative exo-sialidase NanH
-SpaA-type_pili	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
-SpaD-type_pili	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
-SpaH-type_pili	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
+DIP0543	ADHESIN_Corynebacterium	DIP0543	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	VIRULENCE/ADHESIN	VIRULENCE/ADHESIN	Putative exo-sialidase NanH		
 Surface-anchored pilus proteins	ADHESIN_Corynebacterium	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	ADHESIN	ADHESIN			
 sapA	Surface-anchored pilus proteins	sapA	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SapADE_diphtheriae	SapADE_diphtheriae	Surface-anchored pilus proteins sapA
 sapD	Surface-anchored pilus proteins	sapD	-	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	1	ADHESIN	ADHESIN	SapADE_diphtheriae	SapADE_diphtheriae	Surface-anchored pilus proteins sapD
