@@ -12,11 +12,11 @@ narH	MOLECULAR_NITRATE	narH	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOV
 narG	MOLECULAR_NITRATE	narG	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narG	narG	Corynebacterium diphtheriae nitrate reductase subunit alpha narG
 narK	MOLECULAR_NITRATE	narK	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	1	MOLECULAR_BIOVAR	MOLECULAR_BIOVAR	narIJHK	narIJHK	Corynebacterium diphtheriae MFS transporter narK
 VIRULENCE_Corynebacterium	VIRULENCE	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	VIRULENCE	VIRULENCE			
-tox_pseudotuberculosis	tox	tox_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium pseudotuberculosis diphtheria toxin precursor tox
-tox_ulcerans	tox	tox_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium ulcerans diphtheria toxin precursor tox
-tox_diphtheriae	tox	tox_diphtheriae	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium diphtheriae diphtheria toxin precursor tox
-pld_pseudotuberculosis	pld	pld_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium pseudotuberculosis Phospholipase D
-pld_ulcerans	pld	pld_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium ulcerans Phospholipase D
+tox_pseudotuberculosis	VIRULENCE_Corynebacterium	tox_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium pseudotuberculosis diphtheria toxin precursor tox
+tox_ulcerans	VIRULENCE_Corynebacterium	tox_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium ulcerans diphtheria toxin precursor tox
+tox_diphtheriae	VIRULENCE_Corynebacterium	tox_diphtheriae	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	TOXIN	TOXIN	Corynebacterium diphtheriae diphtheria toxin precursor tox
+pld_pseudotuberculosis	VIRULENCE_Corynebacterium	pld_pseudotuberculosis	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium pseudotuberculosis Phospholipase D
+pld_ulcerans	VIRULENCE_Corynebacterium	pld_ulcerans	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Corynebacterium ulcerans Phospholipase D
 rbp	VIRULENCE_Corynebacterium	rbp	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Putative ribosome binding protein
 rbp-like	VIRULENCE_Corynebacterium	rbp-like	-	0.00	0.00	60.00	80.00	90.00	70.00	90.00	25.00	1	VIRULENCE	VIRULENCE	OTHER_TOXINS	OTHER_TOXINS	Ribosome binding protein like
 REGULATOR	ALL	-	-	0	0	0.00	0.00	0.00	0.00	0.00	0.00	0	REGULATOR	REGULATOR			
