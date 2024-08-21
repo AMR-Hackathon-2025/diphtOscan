@@ -400,7 +400,7 @@ if __name__ == "__main__":
     else : 
         results = table_results
         
-    results = results.fillna("-")
+    results = results.infer_objects().fillna("-")
         
     spuA(results, args)
     narG(results, args)
