@@ -52,8 +52,8 @@ Usage:
 """
 
 __authors__ = ("Melanie HENNART; Martin RETHORET-PASTY")
-__contact__ = ("melanie.hennart@pasteur.fr; martin.rethoret-pasty@pasteur.fr")
-__version__ = "1.6.0" 
+__contact__ = ("martin.rethoret-pasty@pasteur.fr")
+__version__ = "1.6.1" 
 __copyright__ = "copyleft"
 __date__ = "2024/03/04"
 
@@ -125,13 +125,13 @@ from module.utils import (
     )
 
 def test_unique_dependency(name:str):
-    return subprocess.call(["command", "-v", name])
+    return shutil.which(name) is not None
 
 
 def test_multiple_dependencies(dependencies:List[str]):
     for dependency in dependencies:
-        rc = test_unique_dependency(dependency)
-        if rc == 1:
+        presence = test_unique_dependency(dependency)
+        if presence is not True:
             print(f'/!\\ Warning /!\\ : {dependency} missing in path!')
             sys.exit(-1)
 
@@ -400,7 +400,7 @@ if __name__ == "__main__":
     else : 
         results = table_results
         
-    results = results.fillna("-")
+    results = results.infer_objects().fillna("-")
         
     spuA(results, args)
     narG(results, args)

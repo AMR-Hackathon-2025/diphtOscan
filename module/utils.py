@@ -153,7 +153,7 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
         gene = data_resistance['Gene symbol'][res] + dico_Method[data_resistance['Method'][res]]
         # Search for certain cases of interruption due to a contig end that AMRfinder is unable to find.    
         if is_contig_edge(data_resistance.iloc[res]) : 
-            data_resistance['Method'][res] = "CTRL_CONTIG_END" 
+            data_resistance.loc[res, 'Method'] = "CTRL_CONTIG_END" 
 
         if ('tox' in data_resistance['Gene symbol'][res]) and \
            (float(data_resistance['% Coverage of reference sequence'][res]) != 100.00) and \
@@ -173,8 +173,8 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
         family = data_resistance['Class'][res]
         
         if table[family][strain] != '' :
-               table[family][strain] += ";"
-        table[family][strain] += gene
+               table.loc[strain, family] += ";"
+        table.loc[strain, family] += gene
     return table
 
 
