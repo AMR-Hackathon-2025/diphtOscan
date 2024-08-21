@@ -53,7 +53,7 @@ Usage:
 
 __authors__ = ("Melanie HENNART; Martin RETHORET-PASTY")
 __contact__ = ("martin.rethoret-pasty@pasteur.fr")
-__version__ = "1.6.1" 
+__version__ = "1.7.0" 
 __copyright__ = "copyleft"
 __date__ = "2024/03/04"
 
@@ -149,12 +149,12 @@ def test_required_dependency(args):
     test_multiple_dependencies(diphtoscan_dependencies)
     
     if args.integron: 
-        rc = test_unique_dependency("integron_finder")
+        rc = test_unique_dependency("Integron_finder")
         test_multiple_dependencies(integron_fender_dependencies)
         if rc == 0:
             args.integron = True
         else:
-            print('/!\\ Warning /!\\ : integron_finder missing in path! Integron analysis not carried out.')
+            print('/!\\ Warning /!\\ : Integron_finder missing in path! Integron analysis not carried out.')
             args.integron = False
 
     if args.tree:
@@ -378,7 +378,7 @@ if __name__ == "__main__":
                     ' --gbk --func-annot --mute '+ genome)   
           os.system('find '+ args.outdir + "/Results_Integron_Finder_*/ " + '-empty -type d -delete')
 
-          files = pd.read_csv(args.outdir + "/Results_Integron_Finder_"+strain + "/" + strain+".summary",sep="\t", index_col=0, skiprows = 1)
+          files = pd.read_csv(args.outdir + "/Results_Integron_Finder_"+strain + "/" + strain+".summary",sep="\t", index_col=0, skiprows = 2)
           dict_genome.update(files[['CALIN','complete','In0']].sum().to_dict())
           
         dict_results[strain] = dict_genome
