@@ -28,7 +28,7 @@ Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GI
 
 Need for the `--integron` i.e. using the Integron Finder version 2 tool (https://github.com/gem-pasteur/Integron_Finder)
 
-* [integron_finder](https://github.com/gem-pasteur/Integron_Finder) version >= 2.0.2
+* [integron_finder](https://github.com/gem-pasteur/Integron_Finder) version >= 2.0.5
 
 
 **B.** Clone this repository with the following command line:
