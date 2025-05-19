@@ -1,0 +1,14 @@
+name: diphtoscan
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - pandas
+  - ncbi-amrfinderplus >=3,<4
+  - mash
+  - hmmer
+  - blast
+  - requests
+  - biopython
+
