@@ -5,7 +5,7 @@ channels:
   - defaults
 dependencies:
   - pandas
-  - ncbi-amrfinderplus >=3,<4
+  - ncbi-amrfinderplus >=3,<5
   - mash
   - hmmer
   - blast
