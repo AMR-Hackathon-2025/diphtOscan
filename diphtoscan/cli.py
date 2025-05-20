@@ -301,9 +301,11 @@ def parse_arguments():
         sys.exit(1)
 
     args = parser.parse_args()
-    args.extract = False    
-    args.path = os.path.dirname(os.path.abspath(__file__))
+    args.extract = False
 
+    args.path = os.path.dirname(os.path.abspath(__file__))
+    print("Path to diphtOscan: " + args.path)
+    
     args = test_required_dependency(args)
     return args 
 

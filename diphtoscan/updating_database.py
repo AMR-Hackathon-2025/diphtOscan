@@ -111,8 +111,9 @@ def update_database(arguments, mlst_database: tuple[str, str], tox_database:tupl
         path_tox_sequences, loci_tox = create_db("pubmlst_diphtheria_seqdef", "4", arguments.path +"/data/tox")
         download_profiles_tox ("pubmlst_diphtheria_seqdef", "4", arguments.path +"/data/tox")
         print("   ... done \n")
-        
-        # wget --quiet --recursive --no-parent --no-host-directories --cut-dirs=6 -e robots=off https://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/latest/ -P $PATH_DB/$DATE 
+
+        # Needed when configuring the protein file location
+        amr_database_path = arguments.path + '/data/resistance/' + date
 
         # find AMRFinderPlus version
         amrfinderplus_version = subprocess.run(['amrfinder', '--version'], capture_output=True, text=True).stdout.split('.')[0]
@@ -120,29 +121,30 @@ def update_database(arguments, mlst_database: tuple[str, str], tox_database:tupl
             # URL of latest AMRFinderPlus 3 compatible database
             url = 'https://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/3.12/2024-07-22.1/'
             tsv_suffix = 'tab'
+            amr_protein_file = amr_database_path + '/AMRProt'
         elif amrfinderplus_version == '4':
             url = 'https://ftp.ncbi.nlm.nih.gov/pathogen/Antimicrobial_resistance/AMRFinderPlus/database/latest/'
             tsv_suffix = 'tsv'
+            amr_protein_file = amr_database_path + '/AMRProt.fa'
         else:
             raise RuntimeError(f"Unsupported AMRFinderPlus version: {amrfinderplus_version}")
         
         print(f"Downloading AMRFinderPlus database and saving to {amr_database_path}")
         source_amr_database_path = arguments.path + '/data/resistance/Corynebacterium_diphtheriae'
-        amr_database_path = arguments.path + '/data/resistance/' + date
         download_amrfinder_database(url, amr_database_path)
         open(amr_database_path + '/version.txt', 'w').write(date + '.1')
 
         print("Merging custom database with AMRFinderPlus database")
         # conctatenate proteins to AMRFinderPlus database
         fam_file_path = amr_database_path + '/fam.' + tsv_suffix
-        update_amrfinderplus_db_file(source_amr_database_path + '/AMRProt_Cd', amr_database_path + '/AMRProt.fa')
+        update_amrfinderplus_db_file(source_amr_database_path + '/AMRProt_Cd', amr_protein_file)
         update_amrfinderplus_db_file(source_amr_database_path + '/fam_Cd.tab',
                                      fam_file_path, skip_first_line=True)
         complete_missing_classification(fam_file_path)
 
         print("Building BLAST database for AMRFinderPlus")
         # makeblastdb -in $PATH_DB/$DATE/AMRProt -dbtype prot  -logfile /dev/null
-        subprocess.run(['makeblastdb', '-in', amr_database_path + '/AMRProt.fa',
-                        '-dbtype', 'prot', '-out', amr_database_path + '/AMRProt',
+        subprocess.run(['makeblastdb', '-in', amr_protein_file,
+                        '-dbtype', 'prot',
                         '-logfile', '/dev/null'])
         print("   ... done \n\n\n")

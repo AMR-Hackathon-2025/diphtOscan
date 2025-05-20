@@ -1,8 +1,16 @@
 import os
 import glob
+import subprocess
+
 import pandas as pd
 
 from .mlstBLAST import mlst_blast
+
+
+def find_amrfinderplus_version() -> str:
+    amrfinderplus_version = subprocess.run(['amrfinder', '--version'], capture_output=True, text=True).stdout.split('.')[0]
+    return amrfinderplus_version
+
 
 def find_resistance_db(args):
             files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]
@@ -132,6 +140,14 @@ def find_len_contig(file:str, contig :str):
 
 
 def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
+    amrfinderplus_version = find_amrfinderplus_version()
+    if amrfinderplus_version == '3':
+        coverage_key = '% Coverage of reference sequence'
+        gene_symbol_key = 'Gene symbol'
+    else:
+        coverage_key = '% Coverage of reference'
+        gene_symbol_key = 'Element symbol'
+
     dico_Method = {'ALLELEX' : "",
                    'EXACTX' :  "",
                    'POINTX' : "!",
@@ -150,15 +166,15 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
     table = pd.DataFrame('',index=Strains, columns=Class)
 
     for res in data_resistance.index :
-        gene = data_resistance['Gene symbol'][res] + dico_Method[data_resistance['Method'][res]]
+        gene = data_resistance[gene_symbol_key][res] + dico_Method[data_resistance['Method'][res]]
         # Search for certain cases of interruption due to a contig end that AMRfinder is unable to find.    
         if is_contig_edge(data_resistance.iloc[res]) : 
             data_resistance.loc[res, 'Method'] = "CTRL_CONTIG_END" 
 
-        if ('tox' in data_resistance['Gene symbol'][res]) and \
-           (float(data_resistance['% Coverage of reference sequence'][res]) != 100.00) and \
+        if ('tox' in data_resistance[gene_symbol_key][res]) and \
+           (float(data_resistance[coverage_key][res]) != 100.00) and \
            (data_resistance['Method'][res] not in avoid_NTTB_prediction) :
-                gene = data_resistance['Gene symbol'][res] + "-NTTB"             
+                gene = data_resistance[gene_symbol_key][res] + "-NTTB"             
 
         # For all methods where coverage can be < 100%, display the %age of missing coverage
         if (data_resistance['Method'][res] == 'PARTIALX') or \
@@ -166,7 +182,7 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
            (data_resistance['Method'][res] == 'PARTIAL_CONTIG_ENDX') or \
            (data_resistance['Method'][res] == 'CTRL_CONTIG_END') or \
            (data_resistance['Method'][res] == 'INTERNAL_STOP') :
-                missing_coverage = round(100-float(data_resistance['% Coverage of reference sequence'][res]),1)
+                missing_coverage = round(100-float(data_resistance[coverage_key][res]),1)
                 if (100 - missing_coverage) < 100 :
                     gene = f"{gene}-{missing_coverage}%" 
         strain = data_resistance['Name'][res]
@@ -179,6 +195,12 @@ def armfinder_to_table(data_resistance:pd.DataFrame) ->  pd.DataFrame:
 
 
 def get_genomic_context(outdir:str, data:pd.DataFrame):
+    amrfinderplus_version = find_amrfinderplus_version()
+    if amrfinderplus_version == '3':
+        gene_symbol_key = 'Gene symbol'
+    else:
+        gene_symbol_key = 'Element symbol'
+
     d = []
     data_AMR = data[~data['Class'].isin( list(set(get_virulence_extended())| set(get_virulence())))]
     fi = open(outdir+'/distance_context.txt', 'a', encoding='utf-8')
@@ -186,16 +208,16 @@ def get_genomic_context(outdir:str, data:pd.DataFrame):
         table_contigs  = data_AMR[data_AMR['Contig id'] == contigs]
         
         if len(table_contigs) == 1 : 
-            d.append(table_contigs['Gene symbol'].value_counts().keys()[0])
+            d.append(table_contigs[gene_symbol_key].value_counts().keys()[0])
         else:  
-            t = table_contigs['Gene symbol'].iloc[0]
+            t = table_contigs[gene_symbol_key].iloc[0]
             for i in range(0,len(table_contigs)-1):
                 dis = int(table_contigs['Start'].iloc[i+1]) - int(table_contigs['Stop'].iloc[i])
-                fi.write(table_contigs['Gene symbol'].iloc[i]+'\t'+table_contigs['Gene symbol'].iloc[i+1]+'\t'+str(abs(dis))+'\n')
+                fi.write(table_contigs[gene_symbol_key].iloc[i]+'\t'+table_contigs[gene_symbol_key].iloc[i+1]+'\t'+str(abs(dis))+'\n')
                 if abs(dis) <=  8000 :  
-                    t +=  ";" + table_contigs['Gene symbol'].iloc[i+1]
+                    t +=  ";" + table_contigs[gene_symbol_key].iloc[i+1]
                 else :
-                    t +=  " || " + table_contigs['Gene symbol'].iloc[i+1]                
+                    t +=  " || " + table_contigs[gene_symbol_key].iloc[i+1]                
             d.append(t)
     fi.close()        
     return " || ".join(d)

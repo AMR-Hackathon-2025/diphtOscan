@@ -4,13 +4,15 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - pandas
-  - ncbi-amrfinderplus >=3,<5
-  - mash
-  - hmmer
-  - blast
-  - requests
   - biopython
+  - pandas
+  - pip
+  - requests
+  - setuptools
+  - blast
+  - hmmer
+  - mash
+  - ncbi-amrfinderplus >=3,<5
   - jolytree
   - integron_finder
 
