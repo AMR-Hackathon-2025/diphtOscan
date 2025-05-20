@@ -137,7 +137,6 @@ def test_multiple_dependencies(dependencies:List[str]):
 
 def test_required_dependency(args):
     diphtoscan_dependencies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
-    joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
     joly_tree_dependencies = ["JolyTree.sh", "gawk",'fastme','REQ']
     integron_fender_dependencies = ['hmmsearch', 'cmsearch', 'prodigal']
     
@@ -157,12 +156,11 @@ def test_required_dependency(args):
             args.integron = False
 
     if args.tree:
-        if os.path.isfile(joly_tree_path):
-            test_multiple_dependencies(joly_tree_dependencies)
-            args.tree = True
-        else:
-            print('/!\\ Warning /!\\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
-            args.tree = False
+        test_multiple_dependencies(joly_tree_dependencies)
+        args.tree = True
+    else:
+        print('/!\\ Warning /!\\ : JolyTree.sh missing in /diphtoscan/script/JolyTree/ ! Joly_tree representation not carried out.')
+        args.tree = False
     print('\n')
     return args
 
@@ -187,6 +185,7 @@ def rename_temp_folder_file(outdir, directory):
     expected_filename = f"{file_name}.txt"
     file_path = os.path.join(directory, expected_filename)
 
+    print(f"Renaming {file_path} to {expected_filename}")
     if os.path.exists(file_path):
         new_filename = expected_filename.replace("_temp_folder.txt", ".txt")
         new_file_path = os.path.join(outdir, new_filename)
@@ -302,9 +301,11 @@ def parse_arguments():
         sys.exit(1)
 
     args = parser.parse_args()
-    args.extract = False    
-    args.path = os.path.dirname(os.path.abspath(__file__))
+    args.extract = False
 
+    args.path = os.path.dirname(os.path.abspath(__file__))
+    print("Path to diphtOscan: " + args.path)
+    
     args = test_required_dependency(args)
     return args 
 
@@ -335,7 +336,8 @@ def main():
 	
     dict_results = {}
     data_resistance = pd.DataFrame()
-    for genome in args.assemblies :
+    for genome in args.assemblies:
+        print("Processing file: " + genome + " in " + args.outdir)
         basename = os.path.basename(genome)
         strain = os.path.splitext(basename)[0]
 
@@ -406,6 +408,7 @@ def main():
     
     results.to_csv(args.outdir+"/"+args.outdir.split("/")[-1]+".txt", sep='\t')
     
+    print("GOT HERE", args.tree, len(args.assemblies))
     if args.tree and len(args.assemblies) >= 4 :
         generate_jolytree(args)
   

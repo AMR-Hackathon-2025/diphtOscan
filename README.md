@@ -15,55 +15,29 @@ _diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphther
 
 ## Installation and execution
 
-**A.** Install the following programs and tools, or verify that they are already installed with the required version:
-* [python](https://www.python.org/) version >= 3.8.3
-* [mash](http://mash.readthedocs.io/en/latest/) version >= 2.3 
-* [blast+](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download) version >= 2.13.0
-* [amrfinder](https://github.com/ncbi/amr/wiki) version >= 3.12.8
-* [hmmer](http://hmmer.org/)
+To install:
 
-Note: 
-Need for the `--tree` i.e. using the Jolytree tool (https://gitlab.pasteur.fr/GIPhy/JolyTree)
-* [Jolytree](https://gitlab.pasteur.fr/GIPhy/JolyTree) version >= 2.1 (The JollyTree repository should be cloned into diphtoscan/script/)
+1. Clone the [dipthoscan repository](https://github.com/AMR-Hackathon-2025/diphtOscan).
+2. cd to the `diphtOscan` folder
+3. Install the necessary dependencies using `conda` with `conda env create -f environment.yml`
+4. Activate the `diphtoscan` environment with `conda activate dipthoscan`
+5. Install the tool itself with `python -m pip install . --no-deps`
+6. Update the database with `dipthoscan -u` before first using the tool.
 
-Need for the `--integron` i.e. using the Integron Finder version 2 tool (https://github.com/gem-pasteur/Integron_Finder)
-
-* [integron_finder](https://github.com/gem-pasteur/Integron_Finder) version >= 2.0.5
-
-
-**B.** Clone this repository with the following command line:
-```bash
-git clone https://gitlab.pasteur.fr/BEBP/diphtoscan.git
-```
-
-**C.** Give the execute permission to the file `diphtoscan/__main__.py`:
-```bash
-chmod +x diphtoscan/__main__.py
-```
-
-**D.** Run the installation of the JollyTree module (if you plan to use it) :
-```bash
-diphtoscan/script/update_tools.sh
-```
-
-**E.** Execute _diphtOscan_ with the following command line model:
-```bash
-python __main__.py [options]
-```
 
 ## Usage
 
 Launch _diphtOscan_ without option to read the following documentation:
 
 ```
-usage: __main__.py -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-st] [-t] [-res_vir] [-plus] [-integron] [-o OUTDIR]
+usage: dipthoscan -a ASSEMBLIES [ASSEMBLIES ...] [-u] [-st] [-t] [-res_vir] [-plus] [-integron] [-o OUTDIR]
                    [--min_identity MIN_IDENTITY] [--min_coverage MIN_COVERAGE] [--threads THREADS] [-tree] 
                    [--overwrite] [-h] [--version]
 
 diphtOscan: a tool for characterising virulence and resistance in Corynebacterium
 
 Updating option:
-  -u, --update          Update database MLST, Tox Allele & AMR (default: no).The database update can be executed on its own without the -a option.
+  -u, --update          Update database MLST, Tox Allele & AMR (default: no). The database update can be executed on its own without the -a option.
 
 Required arguments:
   -a ASSEMBLIES [ASSEMBLIES ...], --assemblies ASSEMBLIES [ASSEMBLIES ...]
