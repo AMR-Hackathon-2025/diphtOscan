@@ -12,5 +12,7 @@ dependencies:
   - requests
   - biopython
   - jolytree
+  - integron_finder
+
 
 
