@@ -2,7 +2,7 @@ import os
 import glob
 import pandas as pd
 
-from module.mlstBLAST import mlst_blast
+from .mlstBLAST import mlst_blast
 
 def find_resistance_db(args):
             files = [ name for name in glob.glob(args.path+'/data/resistance/*') if os.path.isdir(name) ]

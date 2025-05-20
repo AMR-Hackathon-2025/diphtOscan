@@ -8,7 +8,7 @@ import requests
 
 import pandas as pd
 
-from module.download_alleles_st import create_db, download_profiles_st, download_profiles_tox
+from .download_alleles_st import create_db, download_profiles_st, download_profiles_tox
 
 node_class = {'pld':'OTHER_TOXINS',
 'spaA' : 'SpaA-type_pili_diphtheriae',

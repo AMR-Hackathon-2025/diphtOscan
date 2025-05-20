@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "diphtoscan"
+dependencies = [
+    "biopython",
+    "pandas",
+    "requests"
+]
+requires-python = ">= 3.8"
+
+authors = [
+  { name = "Melanie HENNART" },
+  { name = "Martin RETHORET-PASTY", email = "martin.rethoret-pasty@pasteur.fr" }
+]
+maintainers = [
+  { name = "Martin RETHORET-PASTY", email = "martin.rethoret-pasty@pasteur.fr" }
+]
+
+description = "diphtoscan annotates antibiotic resistance and virulence factors in _Corynebacterium diphtheriae_ species complex (CdSC) assemblies"
+readme = "README.md"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+keywords = ["bioinformatics", "genomics", "antibiotic resistance", "virulence factors"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3.8",
+]
+
+[project.urls]
+Homepage = "https://gitlab.pasteur.fr/BEBP/diphtoscan"
+
+[project.scripts]
+diphtoscan = "diphtoscan.cli:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "diphtoscan.cli.__version__"}

@@ -104,15 +104,14 @@ import argparse
 import subprocess
 import shutil
 
-sys.path.append('/module')
 
 from typing import List
-from module.species import get_species_results, is_cd_complex
-from module.template_iTOL import spuA, narG, toxin, amr_families
-from module.updating_database import update_database
-from module.jolytree_generation import generate_jolytree
+from .species import get_species_results, is_cd_complex
+from .template_iTOL import spuA, narG, toxin, amr_families
+from .updating_database import update_database
+from .jolytree_generation import generate_jolytree
 
-from module.utils import (
+from .utils import (
     get_chromosome_mlst_results, 
     get_tox_results, 
     get_chromosome_mlst_header, 
@@ -139,7 +138,7 @@ def test_multiple_dependencies(dependencies:List[str]):
 def test_required_dependency(args):
     diphtoscan_dependencies = ["mash",'amrfinder','hmmsearch', 'makeblastdb','blastn', 'blastp'] 
     joly_tree_path = "diphtoscan/script/JolyTree/JolyTree.sh"
-    joly_tree_dependencies = ["gawk",'fastme','REQ']
+    joly_tree_dependencies = ["JolyTree.sh", "gawk",'fastme','REQ']
     integron_fender_dependencies = ['hmmsearch', 'cmsearch', 'prodigal']
     
     if args.assemblies == None: #TODO :Ensure that dependencies are not required to update the database
@@ -183,14 +182,14 @@ def redefine_output_file(args):
     return args, final_output_path
 
 
-def rename_temp_folder_file(directory):
+def rename_temp_folder_file(outdir, directory):
     path, file_name = os.path.split(directory)
     expected_filename = f"{file_name}.txt"
     file_path = os.path.join(directory, expected_filename)
 
     if os.path.exists(file_path):
         new_filename = expected_filename.replace("_temp_folder.txt", ".txt")
-        new_file_path = os.path.join(args.outdir, new_filename)
+        new_file_path = os.path.join(outdir, new_filename)
         
         try:
             os.rename(file_path, new_file_path)
@@ -212,7 +211,7 @@ def move_file_to_outdir_folder(temporary_folder, outdir_folder):
         except Exception as e:
             print(f"Error when deleting {chemin_fichier}: {e}")
 
-    rename_temp_folder_file(temporary_folder)
+    rename_temp_folder_file(outdir_folder, temporary_folder)
 
     for fichier in os.listdir(temporary_folder):
         source_path = os.path.join(temporary_folder, fichier)
@@ -310,8 +309,7 @@ def parse_arguments():
     return args 
 
 
-if __name__ == "__main__":
-      
+def main():      
     args = parse_arguments()
     get_path = os.getcwd()
 
@@ -415,3 +413,7 @@ if __name__ == "__main__":
         move_file_to_outdir_folder(temporary_folder = args.outdir,
                                    outdir_folder = final_output_path
                                    )
+
+
+if __name__ == "__main__":
+    main()
