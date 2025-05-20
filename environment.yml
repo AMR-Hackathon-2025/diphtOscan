@@ -11,4 +11,6 @@ dependencies:
   - blast
   - requests
   - biopython
+  - jolytree
+
 
