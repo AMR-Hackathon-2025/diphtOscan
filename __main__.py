@@ -338,7 +338,6 @@ if __name__ == "__main__":
     dict_results = {}
     data_resistance = pd.DataFrame()
     for genome in args.assemblies :
-
         basename = os.path.basename(genome)
         strain = os.path.splitext(basename)[0]
 
@@ -350,7 +349,7 @@ if __name__ == "__main__":
         if args.tox :
             dict_genome.update(get_tox_results(TOX_db, genome, args))
             
-        if args.resistance_virulence :   
+        if args.resistance_virulence:
             min_identity = "-1" # Defaut amrfinder
             os.system('amrfinder --nucleotide ' + genome +
                       ' --name '+strain+
