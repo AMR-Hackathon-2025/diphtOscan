@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools >= 77.0.3"]
+requires = ["setuptools >= 77.0.3", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -38,3 +38,5 @@ diphtoscan = "diphtoscan.cli:main"
 
 [tool.setuptools.dynamic]
 version = {attr = "diphtoscan.cli.__version__"}
+
+[tool.setuptools_scm]
