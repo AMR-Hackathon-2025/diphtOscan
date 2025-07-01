@@ -20,9 +20,9 @@ To install:
 1. Clone the [dipthoscan repository](https://github.com/AMR-Hackathon-2025/diphtOscan).
 2. cd to the `diphtOscan` folder
 3. Install the necessary dependencies using `conda` with `conda env create -f environment.yml`
-4. Activate the `diphtoscan` environment with `conda activate dipthoscan`
+4. Activate the `diphtoscan` environment with `conda activate diphtoscan`
 5. Install the tool itself with `python -m pip install . --no-deps`
-6. Update the database with `dipthoscan -u` before first using the tool.
+6. Update the database with `diphtoscan -u` before first using the tool.
 
 
 ## Usage
