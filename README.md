@@ -17,7 +17,7 @@ _diphtOscan_ is a tool to search genomic assemblies of _Corynebacterium diphther
 
 To install:
 
-1. Clone the [dipthoscan repository](https://github.com/AMR-Hackathon-2025/diphtOscan).
+1. Clone the [diphtoscan repository](https://github.com/AMR-Hackathon-2025/diphtOscan).
 2. cd to the `diphtOscan` folder
 3. Install the necessary dependencies using `conda` with `conda env create -f environment.yml`
 4. Activate the `diphtoscan` environment with `conda activate diphtoscan`
