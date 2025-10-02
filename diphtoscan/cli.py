@@ -408,7 +408,6 @@ def main():
     
     results.to_csv(args.outdir+"/"+args.outdir.split("/")[-1]+".txt", sep='\t')
     
-    print("GOT HERE", args.tree, len(args.assemblies))
     if args.tree and len(args.assemblies) >= 4 :
         generate_jolytree(args)
   
