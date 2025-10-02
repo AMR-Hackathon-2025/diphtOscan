@@ -138,6 +138,7 @@ def call_one_st(hits:List[BlastHit],
 
     if mismatch_loci_including_snps <= max_missing:
         # only report ST if enough loci are precise matches
+        print("DEBUG: bst", bst, bst in alleles_to_st)
         if bst in alleles_to_st:
             # note may have mismatching alleles due to SNPs, this will be recorded in
             # mismatch_loci_including_snps
@@ -269,6 +270,7 @@ def get_closest_locus_variant(query:List[str], annotated_query:List[str], sts:di
         if item == '-':
             query[index] = '0'
 
+    print("DEBUG: sts", sts)
     # get distance from closest ST, ignoring SNPs
     for st in sts:
         d = sum(map(lambda x, y: bool(int(x)-int(y)), st.split(','), query))
