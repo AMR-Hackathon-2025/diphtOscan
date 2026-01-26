@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>diphtOscan Report</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header .version {
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .summary-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 8px;
+        }
+
+        .summary-card .big-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .summary-card ul {
+            list-style: none;
+        }
+
+        .summary-card li {
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-card li:last-child {
+            border-bottom: none;
+        }
+
+        .summary-card .count {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .tox-positive {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+        }
+
+        .tox-positive .big-number {
+            color: var(--danger-color);
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        section h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+        }
+
+        th:hover {
+            background-color: var(--secondary-color);
+        }
+
+        th.sorted-asc::after {
+            content: ' ▲';
+        }
+
+        th.sorted-desc::after {
+            content: ' ▼';
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+
+        td.sample-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Gene presence/absence coloring */
+        td.gene-present {
+            background-color: #ffcdd2;
+            color: var(--danger-color);
+        }
+
+        td.gene-absent {
+            background-color: #e8f5e9;
+            color: #81c784;
+        }
+
+        td.tox-positive {
+            background-color: #ffcdd2;
+            font-weight: bold;
+        }
+
+        td.tox-negative {
+            background-color: #e8f5e9;
+        }
+
+        /* Species colors */
+        .species-cdiphtheriae { color: #4CAF50; font-weight: bold; }
+        .species-culcerans { color: #2196F3; font-weight: bold; }
+        .species-cpseudotuberculosis { color: #FF9800; font-weight: bold; }
+        .species-cbelfantii { color: #9C27B0; font-weight: bold; }
+        .species-crouxii { color: #E91E63; font-weight: bold; }
+        .species-cramonii { color: #00BCD4; font-weight: bold; }
+        .species-unknown { color: #9E9E9E; }
+
+        /* Biovar styling */
+        .biovar-gravis { color: #E91E63; font-weight: bold; }
+        .biovar-mitis { color: #4CAF50; font-weight: bold; }
+        .biovar-belfantii { color: #9C27B0; font-weight: bold; }
+
+        /* Distribution chart */
+        .distribution-chart {
+            display: flex;
+            height: 30px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .distribution-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+            min-width: 30px;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Search/filter */
+        .search-box {
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--secondary-color);
+        }
+
+        @media print {
+            header {
+                background: var(--primary-color);
+                -webkit-print-color-adjust: exact;
+            }
+            .search-box {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>diphtOscan Analysis Report</h1>
+        <p class="version">Version {{ version }}</p>
+    </header>
+
+    <section class="summary">
+        <h2>Summary</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>Total Samples</h3>
+                <div class="big-number">{{ total_samples }}</div>
+            </div>
+
+            {% if summary.species_distribution %}
+            <div class="summary-card">
+                <h3>Species Distribution</h3>
+                <ul>
+                {% for species, count in summary.species_distribution.items() %}
+                    <li>
+                        <span>{{ species }}</span>
+                        <span class="count">{{ count }}</span>
+                    </li>
+                {% endfor %}
+                </ul>
+                {% if total_samples > 0 %}
+                <div class="distribution-chart">
+                {% for species, count in summary.species_distribution.items() %}
+                    {% set percent = (count / total_samples * 100)|round(1) %}
+                    {% set color = '#4CAF50' if 'diphtheriae' in species else '#2196F3' if 'ulcerans' in species else '#FF9800' if 'pseudotuberculosis' in species else '#9C27B0' if 'belfantii' in species else '#9E9E9E' %}
+                    <div class="distribution-bar" style="width: {{ percent }}%; background-color: {{ color }};">
+                        {% if percent > 10 %}{{ percent }}%{% endif %}
+                    </div>
+                {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if summary.tox_positive is defined %}
+            <div class="summary-card {% if summary.tox_positive > 0 %}tox-positive{% endif %}">
+                <h3>Tox Gene Status</h3>
+                <div class="big-number">{{ summary.tox_percent }}%</div>
+                <p>{{ summary.tox_positive }} positive / {{ summary.tox_negative }} negative</p>
+            </div>
+            {% endif %}
+
+            {% if summary.biovar_distribution %}
+            <div class="summary-card">
+                <h3>Biovar Distribution</h3>
+                <ul>
+                {% for biovar, count in summary.biovar_distribution.items() %}
+                    <li>
+                        <span>{{ biovar }}</span>
+                        <span class="count">{{ count }}</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if summary.amr_prevalence %}
+            <div class="summary-card">
+                <h3>AMR Prevalence</h3>
+                <ul>
+                {% for family, data in summary.amr_prevalence.items() %}
+                    <li>
+                        <span>{{ family }}</span>
+                        <span class="count">{{ data.count }} ({{ data.percent }}%)</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if summary.qc_summary %}
+            <div class="summary-card">
+                <h3>Assembly Quality</h3>
+                <ul>
+                {% if summary.qc_summary.avg_length %}
+                    <li>
+                        <span>Avg Length</span>
+                        <span class="count">{{ "{:,}".format(summary.qc_summary.avg_length) }} bp</span>
+                    </li>
+                {% endif %}
+                {% if summary.qc_summary.avg_contigs %}
+                    <li>
+                        <span>Avg Contigs</span>
+                        <span class="count">{{ summary.qc_summary.avg_contigs }}</span>
+                    </li>
+                {% endif %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="results">
+        <h2>Detailed Results</h2>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search samples..." onkeyup="filterTable()">
+        </div>
+        <div class="table-container">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Sample</th>
+                        {% for col in columns %}
+                        <th onclick="sortTable({{ loop.index }})">{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for sample in samples %}
+                    <tr>
+                        <td class="sample-name">{{ sample.name }}</td>
+                        {% for col in columns %}
+                            {% set value = sample[col] %}
+                            {% if col == 'species' %}
+                                {% set species_class = 'species-' + value|replace(' ', '')|replace('.', '')|lower %}
+                                <td class="{{ species_class }}">{{ value }}</td>
+                            {% elif col == 'biovar' %}
+                                {% set biovar_class = 'biovar-' + value|lower if value != '-' else '' %}
+                                <td class="{{ biovar_class }}">{{ value }}</td>
+                            {% elif col == 'tox_allele' %}
+                                <td class="{% if value != '-' %}tox-positive{% else %}tox-negative{% endif %}">{{ value }}</td>
+                            {% elif col in amr_columns %}
+                                <td class="{% if value != '-' %}gene-present{% else %}gene-absent{% endif %}">{{ value }}</td>
+                            {% else %}
+                                <td>{{ value }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <p>Generated by <a href="https://gitlab.pasteur.fr/BEBP/diphtoscan" target="_blank">diphtOscan</a> v{{ version }}</p>
+        <p>Institut Pasteur - Biodiversity and Epidemiology of Bacterial Pathogens</p>
+    </footer>
+
+    <script>
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('resultsTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        let sortDirection = {};
+
+        function sortTable(columnIndex) {
+            const table = document.getElementById('resultsTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const headers = table.querySelectorAll('th');
+
+            // Toggle direction
+            sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
+            const direction = sortDirection[columnIndex];
+
+            // Update header styling
+            headers.forEach((h, i) => {
+                h.classList.remove('sorted-asc', 'sorted-desc');
+                if (i === columnIndex) {
+                    h.classList.add(direction === 'asc' ? 'sorted-asc' : 'sorted-desc');
+                }
+            });
+
+            // Sort rows
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+
+                // Try numeric comparison first
+                const aNum = parseFloat(aValue.replace(/,/g, ''));
+                const bNum = parseFloat(bValue.replace(/,/g, ''));
+
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    return direction === 'asc' ? aNum - bNum : bNum - aNum;
+                }
+
+                // Fall back to string comparison
+                return direction === 'asc'
+                    ? aValue.localeCompare(bValue)
+                    : bValue.localeCompare(aValue);
+            });
+
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+        }
+    </script>
+</body>
+</html>

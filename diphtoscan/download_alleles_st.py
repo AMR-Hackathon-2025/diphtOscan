@@ -17,6 +17,7 @@
 # GNU General Public License for more details.
 
 import os
+import sys
 import requests
 import pandas as pd
 import io 
@@ -43,14 +44,14 @@ def download_alleles(database:str, scheme_id:str, folder:str) -> list:
     r = requests.get(url)
     if r.status_code == 404:
         print('Database ' + database + ' does not exist.')
-        os._exit(1)
+        sys.exit(1)
     loci = []
     if scheme_id:
         url = BASE_URI +  '/db/' + database + '/schemes/' + str(scheme_id);
         r = requests.get(url);
         if r.status_code == 404:
             print('Scheme ' + str(scheme_id) + ' does not exist.');
-            os._exit(1)
+            sys.exit(1)
         loci = r.json()['loci']
     else:
         url = BASE_URI + '/db/' + database + '/loci?return_all=1'
@@ -69,15 +70,60 @@ def download_alleles(database:str, scheme_id:str, folder:str) -> list:
     return name_loci
 
 
-def create_db (database:str, scheme_id:str, folder:str):
+def create_db(database: str, scheme_id: str, folder: str) -> tuple:
+    """
+    Create a combined MLST database from downloaded alleles.
+
+    Downloads individual locus FASTA files and concatenates them
+    into a single database file.
+
+    Parameters
+    ----------
+    database : str
+        Database configuration name (e.g., 'pubmlst_diphtheria_seqdef').
+    scheme_id : str
+        MLST scheme identifier (e.g., '3' for MLST, '4' for tox).
+    folder : str
+        Output directory for the database files.
+
+    Returns
+    -------
+    tuple
+        (path_to_combined_database, list_of_loci_names)
+    """
     loci_mlst = download_alleles(database, scheme_id, folder+"/sequences")
     path_loci_mlst = [folder+"/sequences/"+ locus +'.fas' for locus in loci_mlst]
     path_database = folder +"/"+ database +"_scheme_"+ scheme_id+ ".fas"
-    os.system("cat "+" ".join(path_loci_mlst)+" > "+ path_database + " 2>/dev/null")
+    with open(path_database, 'w') as outfile:
+        for fasta_path in path_loci_mlst:
+            try:
+                with open(fasta_path, 'r') as infile:
+                    outfile.write(infile.read())
+            except FileNotFoundError:
+                pass
     return path_database, loci_mlst
 
 
-def download_profiles_st (database:str, scheme_id:str, folder:str, loci_mlst:list):
+def download_profiles_st(database: str, scheme_id: str, folder: str, loci_mlst: list) -> str:
+    """
+    Download MLST sequence type profiles from PubMLST.
+
+    Parameters
+    ----------
+    database : str
+        Database configuration name.
+    scheme_id : str
+        MLST scheme identifier.
+    folder : str
+        Output directory for the profile file.
+    loci_mlst : list
+        List of locus names to include in the profile table.
+
+    Returns
+    -------
+    str
+        Path to the downloaded st_profiles.txt file.
+    """
     if folder and not os.path.exists(folder):
         os.makedirs(folder)
     dir = folder or './'
@@ -85,15 +131,33 @@ def download_profiles_st (database:str, scheme_id:str, folder:str, loci_mlst:lis
     r = requests.get(url)
     if r.status_code == 404:
         print('Database ' + database + ' does not exist.')
-        os._exit(1)
+        sys.exit(1)
     if scheme_id:
         url = BASE_URI +  '/db/' + database + '/schemes/' + str(scheme_id);
         r = requests.get(url+"/profiles_csv");
         table_profiles_st = pd.read_csv(io.StringIO(r.text), sep="\t", index_col=0, dtype=str)
-        table_profiles_st[loci_mlst].to_csv(dir + '/st_profiles.txt', sep='\t')  
+        table_profiles_st[loci_mlst].to_csv(dir + '/st_profiles.txt', sep='\t')
     return dir + '/st_profiles.txt'
 
-def download_profiles_tox (database:str, scheme_id:str, folder:str):
+
+def download_profiles_tox(database: str, scheme_id: str, folder: str) -> str:
+    """
+    Download tox allele profiles from PubMLST.
+
+    Parameters
+    ----------
+    database : str
+        Database configuration name.
+    scheme_id : str
+        Tox scheme identifier (typically '4').
+    folder : str
+        Output directory for the profile file.
+
+    Returns
+    -------
+    str
+        Path to the downloaded tox_profiles.txt file.
+    """
     if folder and not os.path.exists(folder):
         os.makedirs(folder)
     dir = folder or './'
@@ -101,10 +165,10 @@ def download_profiles_tox (database:str, scheme_id:str, folder:str):
     r = requests.get(url)
     if r.status_code == 404:
         print('Database ' + database + ' does not exist.')
-        os._exit(1)
+        sys.exit(1)
     if scheme_id:
         url = BASE_URI +  '/db/' + database + '/schemes/' + str(scheme_id);
         r = requests.get(url+"/profiles_csv");
         table_profiles_st = pd.read_csv(io.StringIO(r.text), sep="\t", index_col=0, dtype=str)
-        table_profiles_st['tox'].to_csv(dir + '/tox_profiles.txt', sep='\t')  
+        table_profiles_st['tox'].to_csv(dir + '/tox_profiles.txt', sep='\t')
     return dir + '/tox_profiles.txt'

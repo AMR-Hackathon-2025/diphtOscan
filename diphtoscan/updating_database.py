@@ -30,7 +30,18 @@ node_class = {'pld':'OTHER_TOXINS',
 'nanH' : 'VIRULENCE/ADHESIN',
 }
 
-def complete_missing_classification(path:str):
+def complete_missing_classification(path: str) -> None:
+    """
+    Fill in missing class/subclass fields in the AMRFinderPlus family file.
+
+    Some custom C. diphtheriae genes may have missing classifications.
+    This function populates them from the node_class dictionary.
+
+    Parameters
+    ----------
+    path : str
+        Path to the fam.tab or fam.tsv file.
+    """
     df = pd.read_csv(path, sep="\t", escapechar="\\", engine="python")
     missing_class = df.loc[df['parent_node_id']=='VIRULENCE_Cdiphth']
     for index in missing_class.index:
@@ -82,9 +93,15 @@ def update_amrfinderplus_db_file(input_path: str, output_path: str, skip_first_l
 
 
 
-def remove_mlst_database(mlst_db_path: str):
+def remove_mlst_database(mlst_db_path: str) -> None:
     """
-    Remove the MLST database files from the specified path.
+    Remove existing MLST database files before downloading new ones.
+
+    Parameters
+    ----------
+    mlst_db_path : str
+        Path to the combined MLST FASTA file. The parent directory
+        and sequences/ subdirectory will be cleaned.
     """
     db_path = Path(mlst_db_path).parent
     for path in db_path.glob('*'):
@@ -95,7 +112,28 @@ def remove_mlst_database(mlst_db_path: str):
     (db_path / 'sequences').rmdir()
 
 
-def update_database(arguments, mlst_database: tuple[str, str], tox_database:tuple):
+def update_database(arguments, mlst_database: tuple, tox_database: tuple) -> None:
+    """
+    Update all diphtOscan databases from online sources.
+
+    Downloads MLST alleles and profiles from PubMLST, tox alleles,
+    and the AMRFinderPlus database. Merges custom C. diphtheriae
+    annotations with the AMRFinderPlus database.
+
+    Parameters
+    ----------
+    arguments : argparse.Namespace
+        Parsed arguments containing update flag and path attribute.
+    mlst_database : tuple
+        Tuple of (header, sequence_path, profile_path) for MLST.
+    tox_database : tuple
+        Tuple of (header, sequence_path, profile_path) for tox.
+
+    Notes
+    -----
+    Supports both AMRFinderPlus v3 and v4 database formats.
+    Creates dated database directories (YYYY-MM-DD).
+    """
     if arguments.update :
         date = datetime.datetime.today().strftime('%Y-%m-%d') 
 

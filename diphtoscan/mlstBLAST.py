@@ -29,25 +29,78 @@ from .blastn import run_blastn, BlastHit
 from .truncation import truncation_check
 
 
-def mlst_blast(seqs:str, 
-               database:str, 
-               info_arg:str, 
-               assemblies:list, 
-               min_cov:float, 
-               min_ident:float, 
-               max_missing:int,
-               check_for_truncation=False, 
-               report_incomplete=False, 
-               allow_multiple=False,
-               min_gene_count=None, 
-               unknown_group_name=None,
-               min_spurious_cov=None, 
-               min_spurious_ident=None
+def mlst_blast(seqs: str,
+               database: str,
+               info_arg: str,
+               assemblies: list,
+               min_cov: float,
+               min_ident: float,
+               max_missing: int,
+               check_for_truncation: bool = False,
+               report_incomplete: bool = False,
+               allow_multiple: bool = False,
+               min_gene_count: int = None,
+               unknown_group_name: str = None,
+               min_spurious_cov: float = None,
+               min_spurious_ident: float = None
                ) -> tuple:
+    """
+    Perform MLST typing using BLAST-based allele matching.
+
+    Identifies sequence type by matching assembly sequences against
+    an allele database and looking up the ST profile.
+
+    Parameters
+    ----------
+    seqs : str
+        Path to the combined allele FASTA database.
+    database : str
+        Path to the ST profile definitions file.
+    info_arg : str
+        'yes' to include info column from profiles, 'no' otherwise.
+    assemblies : list
+        List containing assembly file path (uses first element).
+    min_cov : float
+        Minimum coverage threshold for allele matches (0-100).
+    min_ident : float
+        Minimum identity threshold for allele matches (0-100).
+    max_missing : int
+        Maximum number of missing/mismatched loci to attempt ST calling.
+    check_for_truncation : bool, optional
+        Whether to check for truncated genes (default: False).
+    report_incomplete : bool, optional
+        Whether to add '(incomplete)' to info for missing loci (default: False).
+    allow_multiple : bool, optional
+        Whether to allow multiple ST calls from different contigs (default: False).
+    min_gene_count : int, optional
+        Minimum genes required for unknown group assignment (default: None).
+    unknown_group_name : str, optional
+        Name to assign when minimum gene count met but no ST (default: None).
+    min_spurious_cov : float, optional
+        Coverage threshold for tracking spurious hits (default: None).
+    min_spurious_ident : float, optional
+        Identity threshold for tracking spurious hits (default: None).
+
+    Returns
+    -------
+    tuple
+        (final_call, final_alleles, final_info, spurious_hits) where:
+        - final_call: ST number (with -nLV suffix if variant), '0' if no call
+        - final_alleles: List of allele calls per locus (with * for inexact)
+        - final_info: Associated info from profile database
+        - spurious_hits: List of low-quality hits (if min_spurious_* set)
+
+    Notes
+    -----
+    ST calling requires at least half of the loci (len(header)/2) to have
+    exact allele matches. Imprecise matches are marked with '*'.
+    """
     st_names, alleles_to_st, st_to_info, header = load_st_database(database, info_arg)
 
-    # In order to call an ST, there needs to be an exact match for half (rounded down) of the
-    # alleles.
+    # Required exact matches = half of total loci (rounded down)
+    # For 7-locus MLST: requires at least 3 exact allele matches
+    # This threshold balances confidence in ST assignment with tolerance
+    # for sequencing errors or novel alleles
     required_exact_matches = int(len(header) / 2)
 
     contigs = assemblies[0]
@@ -97,17 +150,53 @@ def mlst_blast(seqs:str,
     return final_call, final_alleles, final_info, spurious_hits
 
 
-def call_one_st(hits:List[BlastHit], 
-                header:List[str], 
-                check_for_truncation:bool, 
-                max_missing:int, 
-                alleles_to_st:dict,
-                required_exact_matches:int, 
-                info_arg:str, 
-                st_to_info:dict, 
-                report_incomplete:bool,
-                min_gene_count, 
-                unknown_group_name) -> tuple:
+def call_one_st(hits: List[BlastHit],
+                header: List[str],
+                check_for_truncation: bool,
+                max_missing: int,
+                alleles_to_st: dict,
+                required_exact_matches: int,
+                info_arg: str,
+                st_to_info: dict,
+                report_incomplete: bool,
+                min_gene_count: int,
+                unknown_group_name: str) -> tuple:
+    """
+    Call a single sequence type from a set of BLAST hits.
+
+    Parameters
+    ----------
+    hits : List[BlastHit]
+        BLAST hits for one contig cluster or all hits.
+    header : List[str]
+        List of locus names in the MLST scheme.
+    check_for_truncation : bool
+        Whether to check for amino acid level truncations.
+    max_missing : int
+        Maximum mismatching loci to still attempt ST lookup.
+    alleles_to_st : dict
+        Mapping from allele combination string to ST number.
+    required_exact_matches : int
+        Minimum exact allele matches required for ST assignment.
+    info_arg : str
+        'yes' to include info from profiles, 'no' otherwise.
+    st_to_info : dict
+        Mapping from ST to additional info (e.g., clonal complex).
+    report_incomplete : bool
+        Whether to mark incomplete calls in info string.
+    min_gene_count : int
+        Minimum genes for unknown group assignment.
+    unknown_group_name : str
+        Group name when enough genes but unknown ST.
+
+    Returns
+    -------
+    tuple
+        (bst, best_st_annotated, info_final) where:
+        - bst: ST number (with -nLV suffix), '0' if no call
+        - best_st_annotated: List of allele numbers with annotations
+        - info_final: Info string from profile database
+    """
     best_alleles = get_best_allele_per_locus(hits, check_for_truncation)
 
     best_st = []
@@ -138,7 +227,6 @@ def call_one_st(hits:List[BlastHit],
 
     if mismatch_loci_including_snps <= max_missing:
         # only report ST if enough loci are precise matches
-        print("DEBUG: bst", bst, bst in alleles_to_st)
         if bst in alleles_to_st:
             # note may have mismatching alleles due to SNPs, this will be recorded in
             # mismatch_loci_including_snps
@@ -270,7 +358,6 @@ def get_closest_locus_variant(query:List[str], annotated_query:List[str], sts:di
         if item == '-':
             query[index] = '0'
 
-    print("DEBUG: sts", sts)
     # get distance from closest ST, ignoring SNPs
     for st in sts:
         d = sum(map(lambda x, y: bool(int(x)-int(y)), st.split(','), query))

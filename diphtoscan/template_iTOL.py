@@ -12,11 +12,19 @@ details. You should have received a copy of the GNU General Public License along
 not, see <http://www.gnu.org/licenses/>.
 """
 
-import os
 import pandas as pd 
 
 
-def get_BINARY_header():   
+def get_BINARY_header() -> str:
+    """
+    Return the iTOL binary dataset header template.
+
+    Returns
+    -------
+    str
+        Header template for iTOL binary presence/absence datasets
+        with placeholders for Title, Shapes, Labels, and Colors.
+    """
     header_BINARY = """DATASET_BINARY
 SEPARATOR COMMA
 DATASET_LABEL,Title
@@ -30,7 +38,16 @@ DATA
     return header_BINARY
 
 
-def get_STRIP_header():   
+def get_STRIP_header() -> str:
+    """
+    Return the iTOL color strip dataset header template.
+
+    Returns
+    -------
+    str
+        Header template for iTOL color strip datasets
+        with placeholder for Title.
+    """
     header_STRIP = """DATASET_COLORSTRIP
 SEPARATOR COMMA
 DATASET_LABEL,Title
@@ -47,7 +64,16 @@ DATA
     return header_STRIP 
 
 
-def get_TOX_header():  
+def get_TOX_header() -> str:
+    """
+    Return the iTOL toxin-specific binary dataset header.
+
+    Returns
+    -------
+    str
+        Pre-configured header for toxin visualization with
+        separate columns for intact and truncated toxin.
+    """
     header_TOX = """DATASET_BINARY
 SEPARATOR COMMA
 DATASET_LABEL,toxin
@@ -62,7 +88,31 @@ DATA
     return header_TOX
 
 
-def writeTemplateBinary (outdir, file, column, values, colors, symbols):
+def writeTemplateBinary(outdir: str, file: pd.DataFrame, column: str,
+                        values: list, colors: list, symbols: list) -> pd.DataFrame:
+    """
+    Write an iTOL binary presence/absence dataset file.
+
+    Parameters
+    ----------
+    outdir : str
+        Output directory path.
+    file : pd.DataFrame
+        Results DataFrame with strain indices.
+    column : str
+        Column name from results to visualize.
+    values : list
+        Gene/feature names to check for presence.
+    colors : list
+        Hex color codes for each value.
+    symbols : list
+        iTOL shape codes for each value (e.g., '1', '2', '3').
+
+    Returns
+    -------
+    pd.DataFrame
+        Binary presence matrix (1/0) for the analyzed column.
+    """
     f = open(outdir+"/"+column.replace('/','_')+".txt", 'w', encoding='utf-8')
     header_BINARY = get_BINARY_header()
     header = header_BINARY.replace("Title", column)
@@ -80,7 +130,22 @@ def writeTemplateBinary (outdir, file, column, values, colors, symbols):
     return data
 
 
-def writeTemplateTOX (outdir, file, column):
+def writeTemplateTOX(outdir: str, file: pd.DataFrame, column: str) -> None:
+    """
+    Write an iTOL toxin visualization dataset file.
+
+    Creates a binary dataset with two columns: intact toxin and
+    truncated toxin.
+
+    Parameters
+    ----------
+    outdir : str
+        Output directory path.
+    file : pd.DataFrame
+        Results DataFrame with strain indices and toxin column.
+    column : str
+        Column name containing toxin detection results.
+    """
     f = open(outdir+'/'+column.replace('/','_')+".txt", 'w', encoding='utf-8')
     f.write(get_TOX_header())
     for strain in file.index :
@@ -96,7 +161,22 @@ def writeTemplateTOX (outdir, file, column):
     return 
 
 
-def writeTemplateStrip (outdir, file, column, list_familiesRes):
+def writeTemplateStrip(outdir: str, file: pd.DataFrame, column: str,
+                       list_familiesRes: dict) -> None:
+    """
+    Write an iTOL color strip dataset file for AMR families.
+
+    Parameters
+    ----------
+    outdir : str
+        Output directory path.
+    file : pd.DataFrame
+        Results DataFrame with strain indices and AMR columns.
+    column : str
+        AMR family column name to visualize.
+    list_familiesRes : dict
+        Dictionary mapping family names to [absent_color, present_color].
+    """
     f = open(outdir+'/'+column+".txt", 'w', encoding='utf-8')
     header_STRIP = get_STRIP_header()
     header = header_STRIP.replace("Title", column)
@@ -110,7 +190,17 @@ def writeTemplateStrip (outdir, file, column, list_familiesRes):
     f.close()
     return 
 
-def spuA(results:pd.DataFrame, arguments):       
+def spuA(results: pd.DataFrame, arguments) -> None:
+    """
+    Generate iTOL visualization file for spuA gene presence.
+
+    Parameters
+    ----------
+    results : pd.DataFrame
+        Analysis results DataFrame.
+    arguments : argparse.Namespace
+        Parsed arguments with outdir attribute.
+    """
     if "spuA" in results.columns:
         SpuA_CLUSTER = ["spuA"]
         SpuA_CLUSTER_color = ['#002b00']
@@ -118,7 +208,17 @@ def spuA(results:pd.DataFrame, arguments):
         writeTemplateBinary(arguments.outdir , results, "spuA", SpuA_CLUSTER, SpuA_CLUSTER_color, SpuA_CLUSTER_symbol)
 
         
-def narG(results:pd.DataFrame, arguments):  
+def narG(results: pd.DataFrame, arguments) -> None:
+    """
+    Generate iTOL visualization file for narG gene presence.
+
+    Parameters
+    ----------
+    results : pd.DataFrame
+        Analysis results DataFrame.
+    arguments : argparse.Namespace
+        Parsed arguments with outdir attribute.
+    """
     if "narG" in results.columns:
         narIJHGK = ["narG"]
         narIJHGK_color = ['#f1c40f']
@@ -126,7 +226,17 @@ def narG(results:pd.DataFrame, arguments):
         writeTemplateBinary(arguments.outdir, results, "narG", narIJHGK, narIJHGK_color, narIJHGK_symbol)
 
 
-def toxin(results:pd.DataFrame, arguments):  
+def toxin(results: pd.DataFrame, arguments) -> None:
+    """
+    Generate iTOL visualization file for toxin gene status.
+
+    Parameters
+    ----------
+    results : pd.DataFrame
+        Analysis results DataFrame.
+    arguments : argparse.Namespace
+        Parsed arguments with outdir attribute.
+    """
     if "TOXIN" in results.columns:
         writeTemplateTOX(arguments.outdir, results, 'TOXIN')
 
@@ -142,7 +252,20 @@ list_familiesRes ={'AMINOGLYCOSIDE' : ['#a6cee3', '#1f78b4'],
                    'RIFAMYCIN' : ["#bd924f", "#926114"]
                    }
 
-def amr_families(results:pd.DataFrame, arguments):
+def amr_families(results: pd.DataFrame, arguments) -> None:
+    """
+    Generate iTOL visualization files for all AMR families.
+
+    Creates color strip files for each antimicrobial resistance family
+    present in the results.
+
+    Parameters
+    ----------
+    results : pd.DataFrame
+        Analysis results DataFrame.
+    arguments : argparse.Namespace
+        Parsed arguments with outdir attribute.
+    """
     for family in list_familiesRes : 
         if family in results.columns:
             writeTemplateStrip (arguments.outdir, results, family, list_familiesRes)
