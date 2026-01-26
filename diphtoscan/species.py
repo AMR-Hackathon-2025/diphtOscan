@@ -29,13 +29,63 @@ not, see <http://www.gnu.org/licenses/>.
 import os
 
 
-def get_species_results(contigs:str, folder:str, threads:str) -> dict:
+def get_species_results(contigs: str, folder: str, threads: str) -> dict:
+    """
+    Identify species and return formatted results dictionary.
+
+    Parameters
+    ----------
+    contigs : str
+        Path to the assembly FASTA file.
+    folder : str
+        Path to the species reference database directory.
+    threads : str
+        Number of threads for Mash processing.
+
+    Returns
+    -------
+    dict
+        Dictionary with keys:
+        - 'species': Species name (e.g., 'C. diphtheriae') or 'unknown'
+        - 'species_match': Match strength ('strong', 'weak', or '')
+    """
     species, species_hit_strength = get_corynebacterium_species(contigs, folder, threads)
     return {'species': species,
             'species_match': species_hit_strength}
 
 
-def get_corynebacterium_species(contigs:str, folder:str, threads:str) -> tuple:
+def get_corynebacterium_species(contigs: str, folder: str, threads: str) -> tuple:
+    """
+    Identify the Corynebacterium species using Mash distance estimation.
+
+    Computes Mash distances between the query assembly and a reference
+    sketch database of Corynebacterium species.
+
+    Parameters
+    ----------
+    contigs : str
+        Path to the assembly FASTA file.
+    folder : str
+        Path to directory containing species_mash_sketches.msh.
+    threads : str
+        Number of threads for Mash processing.
+
+    Returns
+    -------
+    tuple
+        (species_name, match_strength) where:
+        - species_name: Best matching species or 'unknown'
+        - match_strength: 'strong' if distance <= 0.05,
+                         'weak' if distance <= 0.10,
+                         '' if distance > 0.10
+
+    Notes
+    -----
+    Species identification thresholds:
+    - Strong match: Mash distance <= 0.05
+    - Weak match: Mash distance <= 0.10
+    - Unknown: Mash distance > 0.10
+    """
     f = os.popen('mash dist '+folder+'/species_mash_sketches.msh -p '+ threads + ' ' + contigs)
 
     best_species = None
@@ -61,6 +111,10 @@ def get_corynebacterium_species(contigs:str, folder:str, threads:str) -> tuple:
 
     f.close()
 
+    # Mash distance thresholds for species classification
+    # <= 0.05: Strong match - high confidence species identification
+    # <= 0.10: Weak match - possible species, recommend verification
+    # > 0.10: Unknown - species could not be determined
     if best_distance <= 0.05:
         return best_species, 'strong'
     elif best_distance <= 0.1:

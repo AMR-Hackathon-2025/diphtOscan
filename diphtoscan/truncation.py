@@ -18,6 +18,9 @@ from Bio.Seq import Seq
 def truncation_check(hit, cov_threshold=90.0):
     """
     Checks to see if the gene is truncated at the amino acid level.
+
+    cov_threshold=90.0: Amino acid coverage threshold for truncation detection.
+    Genes with >= 90% AA coverage are considered intact; below 90% are truncated.
     """
     nucl_seq, ref_start, _ = hit.get_seq_start_end_pos_strand()
 
